@@ -76,3 +76,9 @@ oroshi:
   job_definition_map:
     class: Daikon\AsyncJob\Job\JobDefinitionMap
     provisioner: Oroshi\Service\Provisioner\JobDefinitionMapProvisioner
+
+  http_pipeline:
+    class: Oroshi\Middleware\DefaultPipeline
+    settings:
+      _share: true
+      _alias: Oroshi\Middleware\PipelineBuilderInterface
