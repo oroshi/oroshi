@@ -1,0 +1,93 @@
+version: "3.2"
+
+secrets:
+  couchdb.yml:
+    file: ../secrets/default/couchdb.yml
+  elasticsearch.yml:
+    file: ../secrets/default/elasticsearch.yml
+  rabbitmq.yml:
+    file: ../secrets/default/rabbitmq.yml
+  swiftmailer.yml:
+    file: ../secrets/default/swiftmailer.yml
+
+services:
+  proxy:
+    container_name: proxy
+    image: blacklabelops/nginx:2.2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SERVER1SERVER_NAME: ${HOST_NAME}
+      SERVER1HTTP_ENABLED: "true"
+      SERVER1REVERSE_PROXY_LOCATION1: /
+      SERVER1REVERSE_PROXY_PASS1: http://nginx:8000
+      SERVER1PROXY_APPLICATION: custom
+      SERVER1REVERSE_PROXY_HEADER1FIELD1: X-Forwarded-Host ${HOST_NAME}
+      SERVER1REVERSE_PROXY_HEADER1FIELD2: X-Forwarded-Proto ${HOST_SCHEME}
+      SERVER1REVERSE_PROXY_HEADER1FIELD3: X-Forwarded-For $$proxy_add_x_forwarded_for
+
+  nginx:
+    container_name: nginx
+    image: nginx:stable
+    command: ["nginx", "-c", "/var/www/var/docker/nginx/conf/nginx.conf", "-g", "daemon off;"]
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    links:
+      - php:php
+
+  php:
+    container_name: php
+    image: oroshi/php:7.2-fpm
+    build: ./php
+    command: ["php-fpm", "-R", "-y", "/var/www/var/docker/php/conf/php-fpm.d/www.conf"]
+    working_dir: /var/www
+    ports:
+      - "9000:9000"
+    links:
+      - couchdb:couchdb
+      - elasticsearch:elasticsearch
+      - rabbitmq:rabbitmq
+    secrets:
+      - couchdb.yml
+      - elasticsearch.yml
+      - rabbitmq.yml
+      - swiftmailer.yml
+    environment:
+      - APP_VERSION
+      - APP_ENV
+      - APP_DEBUG
+      - HOST_SCHEME
+      - HOST_NAME
+      - SECRETS_DIR
+      - PHP_INI_SCAN_DIR=var/docker/php/conf/conf.d
+
+  couchdb:
+    container_name: couchdb
+    image: couchdb:2.2
+    ports:
+      - "5984:5984"
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.2
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: oroshi/rabbitmq:3.7-management
+    build: ./rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER
+      - RABBITMQ_DEFAULT_PASS

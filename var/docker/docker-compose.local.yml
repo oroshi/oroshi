@@ -1,0 +1,37 @@
+version: "3.2"
+volumes:
+  couchdb:
+  elasticsearch:
+
+services:
+  nginx:
+    volumes:
+      - ../../:/var/www
+
+  php:
+    volumes:
+      - ../../:/var/www
+
+  couchdb:
+    volumes:
+      - couchdb:/opt/couchdb/data
+
+  elasticsearch:
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - node.name=${HOST_NAME}
+      - transport.host=127.0.0.1
+      - http.host=0.0.0.0
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - http.cors.allow-headers=Authorization
+      - xpack.watcher.enabled=false
+      - xpack.monitoring.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
+  elasticsearch-head:
+    container_name: elasticsearch-head
+    image: mobz/elasticsearch-head:5
+    ports:
+      - "9100:9100"

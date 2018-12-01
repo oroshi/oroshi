@@ -1,0 +1,17 @@
+storage_adapters:
+  oro.testing.article:
+    class: Daikon\CouchDb\Storage\CouchDbStorageAdapter
+    connector: oro.testing.event_store
+    settings:
+      design_doc: oro-testing-article
+
+stream_stores:
+  oro.testing.article:
+    class: Daikon\CouchDb\Storage\CouchDbStreamStorage
+    storage_adapter: oro.testing.article
+
+units_of_work:
+  oro.testing.article:
+    class: Oroshi\Infrastructure\DataAccess\UnitOfWork\UnitOfWork
+    stream_store: oro.testing.article
+    aggregate_root: Oro\Testing\Article\Article

@@ -1,0 +1,19 @@
+storage_adapters:
+  oro.testing.article.standard:
+    class: Daikon\Elasticsearch5\Storage\Elasticsearch5StorageAdapter
+    connector: oro.testing.projection_store.standard
+    settings:
+      type: oro-testing-article-standard
+
+projectors:
+  oro.testing.article.standard:
+    class: Daikon\ReadModel\Projector\StandardProjector
+    repository: oro.testing.article.standard
+    events:
+    - Oro\Testing\Article\Create\ArticleWasCreated
+    - Oro\Testing\Article\Update\ArticleWasUpdated
+
+repositories:
+   oro.testing.article.standard:
+     class: Oro\Testing\Repository\Standard\ArticleRepository
+     storage_adapter: oro.testing.article.standard

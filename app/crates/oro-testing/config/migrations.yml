@@ -1,0 +1,51 @@
+migration_loaders:
+  oro.testing.event_store:
+    class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
+    connector: oro.testing.filesystem
+    settings:
+      location: migration://couchdb
+
+  oro.testing.projection_store.standard:
+    class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
+    connector: oro.testing.filesystem
+    settings:
+      location: migration://elasticsearch
+
+  oro.testing.message_queue:
+    class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
+    connector: oro.testing.filesystem
+    settings:
+      location: migration://rabbitmq
+
+migration_adapters:
+  oro.testing.event_store:
+    class: Daikon\CouchDb\Migration\CouchDbMigrationAdapter
+    connector: oro.testing.event_store
+
+  oro.testing.projection_store.standard:
+    class: Daikon\Elasticsearch5\Migration\Elasticsearch5MigrationAdapter
+    connector: oro.testing.projection_store.standard
+    settings:
+      type: oro-testing-migration_list
+
+  oro.testing.message_queue:
+    class: Daikon\RabbitMq3\Migration\RabbitMq3MigrationAdapter
+    connector: oro.testing.message_queue.admin
+    settings:
+      exchange: oro.testing.migration_list
+
+migration_targets:
+  oro.testing.event_store:
+    enabled: true
+    migration_adapter: oro.testing.event_store
+    migration_loader: oro.testing.event_store
+
+  oro.testing.projection_store.standard:
+    enabled: true
+    migration_adapter: oro.testing.projection_store.standard
+    migration_loader: oro.testing.projection_store.standard
+
+  oro.testing.message_queue:
+    enabled: true
+    migration_adapter: oro.testing.message_queue
+    migration_loader: oro.testing.message_queue

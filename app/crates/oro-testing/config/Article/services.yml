@@ -1,0 +1,6 @@
+oroshi:
+  command_router:
+    commands:
+      oro.testing.article:
+        Oro\Testing\Article\Create\CreateArticle: Oro\Testing\Handler\CreateArticleHandler
+        Oro\Testing\Article\Update\UpdateArticle: Oro\Testing\Handler\UpdateArticleHandler

@@ -1,0 +1,23 @@
+oro.testing.event_store:
+  connector: oroshi.event_store
+  settings:
+    database: ${project.prefix}%2Boro-testing
+
+oro.testing.projection_store.standard:
+  connector: oroshi.projection_store.standard
+  settings:
+    index: ${project.prefix}.oro-testing
+
+oro.testing.filesystem:
+  connector: oroshi.filesystem
+  settings:
+    mounts:
+      migration:
+        adapter: League\Flysystem\Adapter\Local
+        location: ${crates.oro.testing.migration_dir}
+
+oro.testing.message_queue:
+  connector: oroshi.message_queue
+
+oro.testing.message_queue.admin:
+  connector: oroshi.message_queue.admin
