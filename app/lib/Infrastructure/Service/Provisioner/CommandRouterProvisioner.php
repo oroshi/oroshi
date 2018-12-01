@@ -24,7 +24,7 @@ final class CommandRouterProvisioner implements ProvisionerInterface
                 CommandRouter::class,
                 $this->factory(
                     $injector,
-                    $configProvider->get('services.command_router.commands', [])
+                    $configProvider->get('services.oroshi.command_router.commands', [])
                 )
             );
     }
