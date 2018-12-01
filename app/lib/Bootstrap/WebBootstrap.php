@@ -10,47 +10,24 @@ use Daikon\Config\ConfigProvider;
 use Daikon\Config\ConfigProviderInterface;
 use Daikon\Config\ConfigProviderParams;
 use Daikon\Config\YamlConfigLoader;
-use Psr\Container\ContainerInterface;
 use Oroshi\Config\CratesConfigLoader;
 use Oroshi\Service\ServiceProvisioner;
+use Psr\Container\ContainerInterface;
 
 final class WebBootstrap implements BootstrapInterface
 {
+    use BootstrapTrait;
+
     public function __invoke(Injector $injector, array $bootParams): ContainerInterface
     {
         $configProvider = $this->loadConfiguration($bootParams);
         $injector
             ->share($configProvider)
             ->alias(ConfigProviderInterface::class, ConfigProvider::class);
-
-        return (new ServiceProvisioner)->provision($injector, $configProvider);
-    }
-
-    private function loadConfiguration(array $bootParams): ConfigProviderInterface
-    {
-        return new ConfigProvider(
-            new ConfigProviderParams(
-                array_merge(
-                    [
-                        'app' => [
-                            'loader' => ArrayConfigLoader::class,
-                            'sources' => $bootParams
-                        ],
-                        'crates' => [
-                            'loader' => new CratesConfigLoader([
-                                'crates:' => $bootParams['crates_dir'],
-                                'vendor:' => $bootParams['base_dir'].'/vendor'
-                            ]),
-                            'locations' => [$bootParams['config_dir']],
-                            'sources' => ['crates.yml']
-                        ]
-                    ],
-                    (new YamlConfigLoader)->load(
-                        [$bootParams['config_dir']],
-                        ['loaders.yml']
-                    )
-                )
-            )
-        );
+        $container = (new ServiceProvisioner)->provision($injector, $configProvider);
+        $injector
+            ->share($container)
+            ->alias(ContainerInterface::class, get_class($container));
+        return $container;
     }
 }

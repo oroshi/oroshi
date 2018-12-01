@@ -18,16 +18,16 @@ final class Console extends Application
         return <<<ASCII
    ____  ____  ____  _____ __  ______
   / __ \/ __ \/ __ \/ ___// / / /  _/
- / / / / /_/ / / / /\__ \/ /_/ // /  
-/ /_/ / _, _/ /_/ /___/ / __  // /   
-\____/_/ |_|\____//____/_/ /_/___/ 
+ / / / / /_/ / / / /\__ \/ /_/ // /
+/ /_/ / _, _/ /_/ /___/ / __  // /
+\____/_/ |_|\____//____/_/ /_/___/
 
 ASCII;
     }
 
     public function __construct(
         ConfigProviderInterface $configProvider,
-        array $commands = []
+        array $consoleCommands = []
     ) {
         $this->configProvider = $configProvider;
 
@@ -40,7 +40,7 @@ ASCII;
             new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The environment name.', 'dev')
         );
 
-        foreach ($commands as $command) {
+        foreach ($consoleCommands as $command) {
             $this->add($command);
         }
     }
