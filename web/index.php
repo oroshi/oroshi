@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-use Aura\Router\RouterContainer;
+ini_set('display_errors', 'on');
+ini_set('xdebug.default_enable', 'on');
+
 use Auryn\Injector;
-use Middlewares\RequestHandler;
-use Middlewares\Whoops;
-use Relay\Relay;
-use Oroshi\Infrastructure\Bootstrap\WebBootstrap;
-use Oroshi\Infrastructure\Middleware\AuraRouting;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
+use Oroshi\Bootstrap\WebBootstrap;
+use Oroshi\Middleware\PipelineBuilderInterface;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\HttpHandlerRunner\Emitter\SapiStreamEmitter;
 
@@ -32,19 +29,7 @@ $container = (new WebBootstrap)(new Injector, [
     'cache_dir' => "$baseDir/var/cache"
 ]);
 
-$middlewares = [];
-if ($appDebug) {
-    $middlewares[] = new Whoops(
-        (new Run)->pushHandler(new PrettyPageHandler)
-    );
-}
-
-array_push(
-    $middlewares,
-    $container->get(AuraRouting::class),
-    new RequestHandler($container)
-);
-
+$middlewareHandler = $container->get(PipelineBuilderInterface::class)();
 (new SapiStreamEmitter)->emit(
-    (new Relay($middlewares))->handle(ServerRequestFactory::fromGlobals())
+    $middlewareHandler->handle(ServerRequestFactory::fromGlobals())
 );

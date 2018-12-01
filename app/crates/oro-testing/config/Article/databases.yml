@@ -12,6 +12,6 @@ stream_stores:
 
 units_of_work:
   oro.testing.article:
-    class: Oroshi\Infrastructure\DataAccess\UnitOfWork\UnitOfWork
+    class: Oroshi\DataAccess\UnitOfWork\UnitOfWork
     stream_store: oro.testing.article
     aggregate_root: Oro\Testing\Article\Article
