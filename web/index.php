@@ -6,8 +6,8 @@ ini_set('display_errors', 'on');
 ini_set('xdebug.default_enable', 'on');
 
 use Auryn\Injector;
-use Oroshi\Bootstrap\WebBootstrap;
-use Oroshi\Middleware\PipelineBuilderInterface;
+use Oroshi\Core\Bootstrap\WebBootstrap;
+use Oroshi\Core\Middleware\PipelineBuilderInterface;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\HttpHandlerRunner\Emitter\SapiStreamEmitter;
 

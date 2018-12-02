@@ -6,8 +6,8 @@ declare(strict_types=1);
 ini_set('display_errors', "true");
 
 use Auryn\Injector;
-use Oroshi\Bootstrap\ConsoleBootstrap;
-use Oroshi\Console\Console;
+use Oroshi\Core\Bootstrap\ConsoleBootstrap;
+use Oroshi\Core\Console\Console;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 

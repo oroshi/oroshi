@@ -8,27 +8,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^7.2",
-        "aura/router": "^3.0",
-        "beberlei/assert": "^v3.0",
-        "daikon/config": "master@dev",
-        "daikon/couchdb-adapter": "master@dev",
-        "daikon/elasticsearch5-adapter": "master@dev",
-        "daikon/entity": "master@dev",
-        "daikon/event-sourcing": "master@dev",
-        "daikon/flysystem-adapter": "master@dev",
-        "daikon/rabbitmq3-adapter": "master@dev",
-        "danielstjules/stringy": "^3.1",
-        "middlewares/request-handler": "^v1.3",
-        "middlewares/whoops": "^v1.2",
-        "monolog/monolog": "^1.23",
-        "psr/container": "^1.0",
-        "psr/log": "^1.0",
-        "rdlowrey/auryn": "^v1.4",
-        "relay/relay": "^v2.0",
-        "symfony/console": "^4.1",
-        "vlucas/phpdotenv": "^v2.5",
-        "zendframework/zend-diactoros": "^2.0",
-        "zendframework/zend-httphandlerrunner": "^1.0"
+        "oroshi/oroshi-core": "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4",
@@ -38,7 +18,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Oroshi\\" : "app/lib",
             "Oro\\Testing\\": "app/crates/oro-testing/src"
         }
     },
