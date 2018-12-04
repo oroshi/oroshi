@@ -9,7 +9,9 @@ use Daikon\Entity\ValueObject\Text;
 use Daikon\ReadModel\Projection\ProjectionInterface;
 use Daikon\ReadModel\Projection\ProjectionTrait;
 use Oro\Security\User\Activate\UserWasActivated;
+use Oro\Security\User\Register\AuthTokenWasAdded;
 use Oro\Security\User\Register\UserWasRegistered;
+use Oro\Security\User\Register\VerifyTokenWasAdded;
 use Oro\Security\ValueObject\PasswordHash;
 use Oro\Security\ValueObject\UserRole;
 use Oro\Security\ValueObject\UserState;
@@ -67,6 +69,28 @@ final class User implements ProjectionInterface
             [
                 'aggregateRevision' => $userWasActivated->getAggregateRevision()->toNative(),
                 'state' => UserState::ACTIVATED
+            ]
+        ));
+    }
+
+    private function whenAuthTokenWasAdded(AuthTokenWasAdded $tokenAdded)
+    {
+        return self::fromNative(array_merge(
+            $this->state,
+            [
+                'aggregateRevision' => $userWasActivated->getAggregateRevision()->toNative(),
+                'tokens' => [$tokenAdded->toNative()]
+            ]
+        ));
+    }
+
+    private function whenVerifyTokenWasAdded(VerifyTokenWasAdded $tokenAdded)
+    {
+        return self::fromNative(array_merge(
+            $this->state,
+            [
+                'aggregateRevision' => $userWasActivated->getAggregateRevision()->toNative(),
+                'tokens' => [$tokenAdded->toNative()]
             ]
         ));
     }

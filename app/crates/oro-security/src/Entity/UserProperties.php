@@ -83,4 +83,14 @@ final class UserProperties extends Entity
     {
         return $this->get('tokens');
     }
+
+    public function withAuthTokenAdded(AuthToken $authToken): self
+    {
+        return $this->withValue('tokens', $this->getTokens()->push($authToken));
+    }
+
+    public function withVerifyTokenAdded(VerifyToken $verifyToken): self
+    {
+        return $this->withValue('tokens', $this->getTokens()->push($verifyToken));
+    }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Oro\Security\User\Register;
 
 use Assert\Assertion;
-use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\Entity\ValueObject\Uuid;
 use Daikon\EventSourcing\Aggregate\Event\DomainEvent;
 use Oro\Security\ValueObject\RandomToken;
@@ -14,9 +13,8 @@ use Oro\Security\ValueObject\RandomToken;
  * @map(aggregateId, Daikon\EventSourcing\Aggregate\AggregateId::fromNative)
  * @map(id, Daikon\Entity\ValueObject\Uuid::fromNative)
  * @map(token, Oro\Security\ValueObject\RandomToken::fromNative)
- * @map(expiresAt, Daikon\Entity\ValueObject\Timestamp::fromNative)
  */
-final class AuthTokenWasAdded extends DomainEvent
+final class VerifyTokenWasAdded extends DomainEvent
 {
     /** @var Uuid */
     private $id;
@@ -24,16 +22,12 @@ final class AuthTokenWasAdded extends DomainEvent
     /** @var RandomToken */
     private $token;
 
-    /** @var Timestamp */
-    private $expiresAt;
-
     public static function fromCommand(RegisterUser $registerUser): self
     {
         return self::fromNative([
             (string)$registerUser->getAggregateId(),
             (string)Uuid::generate(),
             (string)RandomToken::generate(),
-            (string)$registerUser->getAuthTokenExpiresAt()
         ]);
     }
 
@@ -50,10 +44,5 @@ final class AuthTokenWasAdded extends DomainEvent
     public function getToken(): RandomToken
     {
         return $this->token;
-    }
-
-    public function getExpiresAt(): Timestamp
-    {
-        return $this->expiresAt;
     }
 }
