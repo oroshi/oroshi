@@ -18,18 +18,18 @@ final class UserState implements ValueObjectInterface
     public const DELETED = 'deleted';
 
     private const STATES = [
-        'unverified',
-        'activated',
-        'deactivated',
-        'deleted'
+        self::UNVERIFIED,
+        self::ACTIVATED,
+        self::DEACTIVATED,
+        self::DELETED
     ];
 
     private $state;
 
     public static function fromNative($nativeValue): ValueObjectInterface
     {
-        Assertion::nullOrInArray($nativeValue, self::STATES);
-        return $nativeValue ? new self($nativeValue) : self::makeEmpty();
+        Assertion::nullOrString($nativeValue);
+        return new self($nativeValue);
     }
 
     public function toNative()
@@ -45,7 +45,7 @@ final class UserState implements ValueObjectInterface
 
     public function isUnverified(): bool
     {
-        return $this->state === self::INITIAL;
+        return $this->state === self::UNVERIFIED;
     }
 
     public function isActivated(): bool
@@ -68,8 +68,9 @@ final class UserState implements ValueObjectInterface
         return $this->toNative();
     }
 
-    private function __construct(string $state)
+    private function __construct(string $state = null)
     {
-        $this->state = $state;
+        Assertion::nullOrInArray($state, self::STATES);
+        $this->state = $state ?? self::UNVERIFIED;
     }
 }

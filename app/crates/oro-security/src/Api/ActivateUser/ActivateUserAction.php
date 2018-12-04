@@ -8,7 +8,8 @@ use function GuzzleHttp\Psr7\parse_query;
 use Oro\Security\Api\UserActionTrait;
 use Oro\Security\ReadModel\Standard\User;
 use Oro\Security\ValueObject\RandomToken;
-use Oroshi\Core\Middleware\ActionInterface;
+use Oroshi\Core\Middleware\Action\ActionInterface;
+use Oroshi\Core\Middleware\ActionHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;
@@ -28,17 +29,17 @@ final class ActivateUserAction implements ActionInterface
         return $this->errorResponse('Failed to activate user.');
     }
 
+    public function registerValidator(ServerRequestInterface $request): ServerRequestInterface
+    {
+        return $request->withAttribute(
+            ActionHandler::ATTR_VALIDATOR,
+            [ActivationValidator::class, [':exportTo' => self::ATTR_TOKEN]]
+        );
+    }
+
     public function handleError(ServerRequestInterface $request): ResponseInterface
     {
         return $this->errorResponse('Invalid activation request-data.', $request);
-    }
-
-    public function getValidation(): ?ValidationInterface
-    {
-        return $this->makeValidation(
-            ActivationValidator::class,
-            [':attribute' => self::ATTR_TOKEN]
-        );
     }
 
     public function isSecure(): bool

@@ -7,7 +7,7 @@ namespace Oro\Security\Api\Login;
 use function GuzzleHttp\Psr7\parse_query;
 use Oro\Security\Api\UserActionTrait;
 use Oro\Security\ReadModel\Standard\User;
-use Oroshi\Core\Middleware\ActionInterface;
+use Oroshi\Core\Middleware\Action\ActionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;

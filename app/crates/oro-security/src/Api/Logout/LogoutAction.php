@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oro\Security\Api\Logout;
 
 use Oro\Security\Api\UserActionTrait;
+use Oroshi\Core\Middleware\Action\ActionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;

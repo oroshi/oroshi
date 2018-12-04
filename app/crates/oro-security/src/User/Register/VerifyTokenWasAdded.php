@@ -7,15 +7,20 @@ namespace Oro\Security\User\Register;
 use Assert\Assertion;
 use Daikon\Entity\ValueObject\Uuid;
 use Daikon\EventSourcing\Aggregate\Event\DomainEvent;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
+use Daikon\Interop\FromToNativeTrait;
 use Oro\Security\ValueObject\RandomToken;
 
 /**
  * @map(aggregateId, Daikon\EventSourcing\Aggregate\AggregateId::fromNative)
+ * @map(aggregateRevision, Daikon\EventSourcing\Aggregate\AggregateRevision::fromNative)
  * @map(id, Daikon\Entity\ValueObject\Uuid::fromNative)
  * @map(token, Oro\Security\ValueObject\RandomToken::fromNative)
  */
 final class VerifyTokenWasAdded extends DomainEvent
 {
+    use FromToNativeTrait;
+
     /** @var Uuid */
     private $id;
 
@@ -25,9 +30,9 @@ final class VerifyTokenWasAdded extends DomainEvent
     public static function fromCommand(RegisterUser $registerUser): self
     {
         return self::fromNative([
-            (string)$registerUser->getAggregateId(),
-            (string)Uuid::generate(),
-            (string)RandomToken::generate(),
+            'aggregateId' => (string)$registerUser->getAggregateId(),
+            'id' => (string)Uuid::generate(),
+            'token' => (string)RandomToken::generate()
         ]);
     }
 

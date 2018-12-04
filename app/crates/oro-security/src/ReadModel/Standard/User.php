@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Oro\Security\ReadModel\Standard;
 
+use Assert\Assertion;
 use Daikon\Entity\ValueObject\Email;
 use Daikon\Entity\ValueObject\Text;
+use Daikon\Entity\ValueObject\ValueObjectInterface;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
+use Daikon\ReadModel\Projection\EventHandlerTrait;
 use Daikon\ReadModel\Projection\ProjectionInterface;
-use Daikon\ReadModel\Projection\ProjectionTrait;
+use Oro\Security\Entity\AuthToken;
+use Oro\Security\Entity\UserProperties;
+use Oro\Security\Entity\VerifyToken;
 use Oro\Security\User\Activate\UserWasActivated;
 use Oro\Security\User\Register\AuthTokenWasAdded;
 use Oro\Security\User\Register\UserWasRegistered;
@@ -15,83 +21,110 @@ use Oro\Security\User\Register\VerifyTokenWasAdded;
 use Oro\Security\ValueObject\PasswordHash;
 use Oro\Security\ValueObject\UserRole;
 use Oro\Security\ValueObject\UserState;
+use Oro\Security\ValueObject\UserTokenList;
 
 final class User implements ProjectionInterface
 {
-    use ProjectionTrait;
+    use EventHandlerTrait;
+
+    /** @var UserProperties */
+    private $userProps;
+
+    public static function fromNative($state): self
+    {
+        return new self(UserProperties::fromNative($state));
+    }
+
+    public function __construct(UserProperties $userProps)
+    {
+        $this->userProps = $userProps;
+    }
+
+    public function getAggregateId(): string
+    {
+        return $this->userProps->getAggregateId()->toNative();
+    }
+
+    public function getAggregateRevision(): int
+    {
+        return $this->userProps->getAggregateRevision()->toNative();
+    }
 
     public function getUsername(): Text
     {
-        return Text::fromNative($this->state['username'] ?? '');
+        return $this->userProps->getUsername();
     }
 
     public function getEmail(): Email
     {
-        return Email::fromNative($this->state['email'] ?? '');
+        return $this->userProps->getEmail();
     }
 
     public function getLocale(): Text
     {
-        return Text::fromNative($this->state['locale'] ?? '');
+        return $this->userProps->getLocale();
     }
 
     public function getRole(): UserRole
     {
-        return UserRole::fromNative($this->state['role'] ?? 'user');
+        return $this->userProps->getRole();
     }
 
     public function getState(): UserState
     {
-        return UserState::fromNative($this->state['state'] ?? UserState::UNVERIFIED);
+        return $this->userProps->getState();
     }
 
-    public function getPasswordHash(): ?PasswordHash
+    public function getPasswordHash(): PasswordHash
     {
-        if (isset($this->state['passwordHash'])) {
-            return PasswordHash::fromNative($this->state['passwordHash']);
-        }
-        return null;
+        return $this->userProps->getPasswordHash();
     }
 
-    private function whenUserWasRegistered(UserWasRegistered $userWasRegistered)
+    public function getTokens(): UserTokenList
     {
-        return self::fromNative(array_merge(
-            $this->state,
-            $userWasRegistered->toNative(),
-            ['state' => UserState::UNVERIFIED]
-        ));
+        return $this->userProps->getTokens();
     }
 
-    private function whenUserWasActivated(UserWasActivated $userWasActivated)
+    public function toNative(): array
     {
-        return self::fromNative(array_merge(
-            $this->state,
-            [
-                'aggregateRevision' => $userWasActivated->getAggregateRevision()->toNative(),
-                'state' => UserState::ACTIVATED
-            ]
-        ));
+        return $this->userProps ? $this->userProps->toNative() : [];
+    }
+
+    private function whenUserWasRegistered(UserWasRegistered $userRegistered)
+    {
+        $this->userProps = UserProperties::fromNative($userRegistered->toNative())
+            ->withState(UserState::fromNative(UserState::UNVERIFIED));
     }
 
     private function whenAuthTokenWasAdded(AuthTokenWasAdded $tokenAdded)
     {
-        return self::fromNative(array_merge(
-            $this->state,
-            [
-                'aggregateRevision' => $userWasActivated->getAggregateRevision()->toNative(),
-                'tokens' => [$tokenAdded->toNative()]
-            ]
-        ));
+        $this->userProps = $this->userProps
+            ->adaptRevision($tokenAdded)
+            ->withAuthTokenAdded(
+                AuthToken::fromNative([
+                    'id' => $tokenAdded->getId(),
+                    'token' => $tokenAdded->getToken(),
+                    'expiresAt' => $tokenAdded->getExpiresAt()
+                ])
+            );
     }
 
-    private function whenVerifyTokenWasAdded(VerifyTokenWasAdded $tokenAdded)
+    private function whenVerifyTokenWasAdded(VerifyTokenWasAdded $tokenAdded): void
     {
-        return self::fromNative(array_merge(
-            $this->state,
-            [
-                'aggregateRevision' => $userWasActivated->getAggregateRevision()->toNative(),
-                'tokens' => [$tokenAdded->toNative()]
-            ]
-        ));
+        $this->userProps = $this->userProps
+            ->adaptRevision($tokenAdded)
+            ->withVerifyTokenAdded(
+                VerifyToken::fromNative([
+                    'id' => $tokenAdded->getId(),
+                    'token' => $tokenAdded->getToken()
+                ])
+            );
+    }
+
+    private function whenUserWasActivated(UserWasActivated $userActivated): void
+    {
+        $this->userProps = $this->userProps
+            ->adaptRevision($userActivated)
+            ->withState(UserState::fromNative(UserState::ACTIVATED));
     }
 }

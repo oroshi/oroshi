@@ -12,6 +12,7 @@ use Daikon\Entity\ValueObject\IntValue;
 use Daikon\Entity\ValueObject\Text;
 use Daikon\Entity\ValueObject\ValueObjectInterface;
 use Daikon\EventSourcing\Aggregate\AggregateId;
+use Daikon\EventSourcing\Aggregate\Event\DomainEventInterface;
 use Oro\Security\ValueObject\PasswordHash;
 use Oro\Security\ValueObject\UserRole;
 use Oro\Security\ValueObject\UserState;
@@ -49,6 +50,11 @@ final class UserProperties extends Entity
         return $this->get('aggregateRevision');
     }
 
+    public function adaptRevision(DomainEventInterface $event): self
+    {
+        return $this->withValue('aggregateRevision', $event->getAggregateRevision()->toNative());
+    }
+
     public function getUsername(): Text
     {
         return $this->get('username');
@@ -79,9 +85,14 @@ final class UserProperties extends Entity
         return $this->get('state');
     }
 
+    public function withState(UserState $state): self
+    {
+        return $this->withValue('state', $state);
+    }
+
     public function getTokens(): UserTokenList
     {
-        return $this->get('tokens');
+        return $this->get('tokens') ?? UserTokenList::makeEmpty();
     }
 
     public function withAuthTokenAdded(AuthToken $authToken): self

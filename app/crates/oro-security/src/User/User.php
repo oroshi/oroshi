@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Oro\Security\User;
 
+use Assert\Assertion;
 use Daikon\EventSourcing\Aggregate\AggregateRootInterface;
 use Daikon\EventSourcing\Aggregate\AggregateRootTrait;
 use Oro\Security\Entity\AuthToken;
-use Oro\Security\Entity\UserProperties;
+use Oro\Security\Entity\VerifyToken;
 use Oro\Security\User\Activate\ActivateUser;
 use Oro\Security\User\Activate\UserWasActivated;
 use Oro\Security\User\Register\AuthTokenWasAdded;
@@ -20,8 +21,8 @@ final class User implements AggregateRootInterface
 {
     use AggregateRootTrait;
 
-    /** @var UserProperties */
-    private $userProps;
+    /** @var UserState */
+    private $currentState;
 
     public static function register(RegisterUser $registerUser): self
     {
@@ -36,35 +37,34 @@ final class User implements AggregateRootInterface
         return $this->reflectThat(UserWasActivated::fromCommand($activateUser));
     }
 
+    public function getCurrentState(): UserState
+    {
+        return $this->currentState;
+    }
+
     protected function whenUserWasRegistered(UserWasRegistered $userRegistered)
     {
-        $this->userProps = UserProperties::fromNative($userRegistered->toNative())
-            ->withValue('state', UserState::UNVERIFIED);
+        Assertion::null(
+            $this->currentState,
+            'Current state expected to be empty upon registration.'
+        );
+        $this->currentState = UserState::fromNative(UserState::UNVERIFIED);
     }
 
     protected function whenAuthTokenWasAdded(AuthTokenWasAdded $tokenAdded)
     {
-        $this->userProps = $this->userProps->withAuthTokenAdded(
-            AuthToken::fromNative([
-                'id' => $tokenAdded->getId(),
-                'token' => $tokenAdded->getToken(),
-                'expiresAt' => $tokenAdded->getExpiresAt()
-            ])
-        );
     }
 
     protected function whenVerifyTokenWasAdded(VerifyTokenWasAdded $tokenAdded)
     {
-        $this->userProps = $this->userProps->withVerifyTokenAdded(
-            AuthToken::fromNative([
-                'id' => $tokenAdded->getId(),
-                'token' => $tokenAdded->getToken()
-            ])
-        );
     }
 
     protected function whenUserWasActivated(UserWasActivated $userActivated)
     {
-        $this->userProps = $this->userProps->withValue('state', UserState::ACTIVATED);
+        Assertion::true(
+            !$this->currentState->isDeactivated() || !$this->currentState->isDeleted(),
+            'User activation is not allowed within the current state.'
+        );
+        $this->currentState = UserState::fromNative(UserState::ACTIVATED);
     }
 }

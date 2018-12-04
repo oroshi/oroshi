@@ -4,39 +4,41 @@ declare(strict_types=1);
 
 namespace Oro\Security\Api\ActivateUser;
 
+use Oro\Security\Api\ValidatorTrait;
 use Oro\Security\ValueObject\RandomToken;
-use Oroshi\Core\Middleware\ValidationInterface;
+use Oroshi\Core\Middleware\Action\ValidatorInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-final class ActivationValidator implements ValidationInterface
+final class ActivationValidator implements ValidatorInterface
 {
-    const PARAM_TOKEN = '_vt';
+    use ValidatorTrait;
 
-    use ValidationTrait;
+    /** @var string */
+    private const INPUT_FIELD = '_vt';
 
     /** @var LoggerInterface */
     private $logger;
 
     /** @var string */
-    private $attribute;
+    private $exportTo;
 
-    public function __construct(LoggerInterface $logger, string $attribute)
+    /** @var string */
+    private $errExport;
+
+    public function __construct(LoggerInterface $logger, string $exportTo, string $errExport = 'errors')
     {
         $this->logger = $logger;
-        $this->attribute = $attribute;
+        $this->exportTo = $exportTo;
+        $this->errExport = $errExport;
     }
 
     public function __invoke(ServerRequestInterface $request): ServerRequestInterface
     {
-        $errors = [];
-        $input = $this->getInput($request);
-        $data = $this->getFields($input, $errors, [self::PARAM_TOKEN]);
-        $tokenData = $this->validateFields($data, $errors);
-        if (empty($errors)) {
-            return $request->withAttribute($this->attribute, $tokenData[self::PARAM_TOKEN]);
-        }
-        return $request->withAttribute('errors', $errors);
+        $tokenInfo = $this->validateFields([self::INPUT_FIELD], $request, $errors = []);
+        return empty($errors)
+            ? $request->withAttribute($this->exportTo, $tokenInfo[self::INPUT_FIELD])
+            : $request->withAttribute($this->errExport, $errors);
     }
 
     private function validateToken($token, array &$errors): ?string

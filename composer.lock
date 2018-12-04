@@ -644,12 +644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/read-model.git",
-                "reference": "4a41783340152c42eae94650128b6f6b7412e942"
+                "reference": "528f4f5551f2df50e32efd884ec0be52b865b888"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/read-model/zipball/4a41783340152c42eae94650128b6f6b7412e942",
-                "reference": "4a41783340152c42eae94650128b6f6b7412e942",
+                "url": "https://api.github.com/repos/daikon-cqrs/read-model/zipball/528f4f5551f2df50e32efd884ec0be52b865b888",
+                "reference": "528f4f5551f2df50e32efd884ec0be52b865b888",
                 "shasum": ""
             },
             "require": {
@@ -684,7 +684,7 @@
                 "read-model",
                 "repository"
             ],
-            "time": "2018-12-01T19:49:26+00:00"
+            "time": "2018-12-04T21:16:07+00:00"
         },
         {
             "name": "danielstjules/stringy",
@@ -1133,16 +1133,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.5.0",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952"
+                "reference": "9f83dded91781a01c63574e387eaa769be769115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53662d6688033a5eccde987bdd5a4a98ebe2d952",
-                "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/9f83dded91781a01c63574e387eaa769be769115",
+                "reference": "9f83dded91781a01c63574e387eaa769be769115",
                 "shasum": ""
             },
             "require": {
@@ -1196,7 +1196,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2018-12-03T05:07:51+00:00"
+            "time": "2018-12-04T20:46:45+00:00"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -1814,12 +1814,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroshi/oroshi-core.git",
-                "reference": "b7d005acaaf986147bb76346928ca377109a8b09"
+                "reference": "e48540cbbea40a2a08c60b31b2764abf1a4f0db0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/b7d005acaaf986147bb76346928ca377109a8b09",
-                "reference": "b7d005acaaf986147bb76346928ca377109a8b09",
+                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/e48540cbbea40a2a08c60b31b2764abf1a4f0db0",
+                "reference": "e48540cbbea40a2a08c60b31b2764abf1a4f0db0",
                 "shasum": ""
             },
             "require": {
@@ -1867,7 +1867,7 @@
             ],
             "description": "Provisioning and configuration of a Daikon CQRS (app) container.",
             "homepage": "https://github.com/oroshi/oroshi-core",
-            "time": "2018-12-04T15:32:35+00:00"
+            "time": "2018-12-04T22:52:51+00:00"
         },
         {
             "name": "paragonie/random_compat",

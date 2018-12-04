@@ -39,22 +39,9 @@ trait UserActionTrait
         return true;
     }
 
-    public function getValidation(): ?ValidationInterface
+    public function registerValidator(ServerRequestInterface $request): ServerRequestInterface
     {
-        return null;
-    }
-
-    private function makeValidation(string $fqcn, array $state): ValidationInterface
-    {
-        Assertion::classExists($fqcn);
-        $validation = $this->container->make($fqcn, $state);
-        Assertion::isInstanceOf($validation, ValidationInterface::class);
-        return $validation;
-    }
-
-    private function hasError(ServerRequestInterface $request): bool
-    {
-        return !empty($request->getAttribute('errors', []));
+        return $request;
     }
 
     private function errorResponse(string $msg, ServerRequestInterface $request): ResponseInterface

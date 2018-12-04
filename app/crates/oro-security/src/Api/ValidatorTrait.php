@@ -10,11 +10,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Stringy\Stringy;
 
-trait ValidationTrait
+trait ValidatorTrait
 {
-    private function validateFields(array $input, array &$errors): array
+    private function validateFields(array $fields, ServerRequestInterface $request, array &$errors): array
     {
         $output = [];
+        $input = $this->getFields($this->getInput($request), $errors, $fields);
         foreach ($input as $fieldname => $rawInput) {
             $validationMethod = 'validate'.Stringy::create($fieldname)->toTitleCase();
             $validationCallback = [$this, $validationMethod];
@@ -50,6 +51,15 @@ trait ValidationTrait
         if (!is_array($data)) {
             throw new RuntimeException('Failed to parse data from request body.');
         }
-        return $data;
+        $trimStrings = function ($value) {
+            if (is_string($value)) {
+                return trim($value);
+            }
+            if (is_array($value)) {
+                return array_map($trimStrings, $value);
+            }
+            return $value;
+        };
+        return $trimStrings($data);
     }
 }

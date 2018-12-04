@@ -40,9 +40,6 @@ final class UserRepository implements RepositoryInterface
 
     public function makeProjection(): ProjectionInterface
     {
-        return User::fromNative([
-            '@type' => User::class,
-            '@parent' => null
-        ]);
+        return User::fromNative(['@type' => User::class]);
     }
 }

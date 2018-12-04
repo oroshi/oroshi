@@ -6,6 +6,7 @@ namespace Oro\Security;
 
 use Assert\Assertion;
 use Daikon\Config\ConfigProviderInterface;
+use Daikon\Entity\ValueObject\Timestamp;
 use Daikon\Entity\ValueObject\Uuid;
 use Daikon\EventSourcing\Aggregate\Command\CommandInterface;
 use Daikon\MessageBus\MessageBusInterface;
@@ -47,12 +48,11 @@ final class UserService
         if (is_string($userInfos['passwordHash'])) {
             $userInfos['passwordHash'] = (string)PasswordHash::gen($userInfos['passwordHash']);
         }
-        if (!isset($userInfos['role'])) {
-            $userInfos['role'] = 'user';
+        if (!$role) {
+            $userInfos['role'] = $role ? (string)$role : 'user';
         }
-        if (!isset($userInfos['aggregateId'])) {
-            $userInfos['aggregateId'] = 'oro.security.user-'.Uuid::generate();
-        }
+        $userInfos['aggregateId'] = 'oro.security.user-'.Uuid::generate();
+        $userInfos['authTokenExpiresAt'] = gmdate(Timestamp::NATIVE_FORMAT, strtotime('+1 month'));
         $registerUser = RegisterUser::fromNative($userInfos);
         return $this->dispatch($registerUser) ? $registerUser : null;
     }

@@ -6,53 +6,66 @@ namespace Oro\Security\Api\RegisterUser;
 
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
-use Oro\Security\Api\ValidationTrait;
-use Oroshi\Core\Middleware\ValidationInterface;
+use Oro\Security\Api\ValidatorTrait;
+use Oroshi\Core\Middleware\Action\ValidatorInterface;
+use Oroshi\Core\Middleware\ActionHandler;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Stringy\Stringy;
 
-final class RegistrationValidator implements ValidationInterface
+final class RegistrationValidator implements ValidatorInterface
 {
-    use ValidationTrait;
+    use ValidatorTrait;
+
+    /** @var int */
+    private const PWD_MIN = 8;
+
+    /** @var int */
+    private const PWD_MAX = 60;
+
+    /** @var int */
+    private const NAME_MIN = 1;
+
+    /** @var int */
+    private const NAME_MAX = 30;
+
+    /** @var string[] */
+    private const INPUT_FIELDS = ['username', 'email', 'passwordHash'];
 
     /** @var LoggerInterface */
     private $logger;
 
     /** @var string */
-    private $attribute;
+    private $exportTo;
 
-    public function __construct(LoggerInterface $logger, string $attribute)
+    /** @var string */
+    private $errExport;
+
+    public function __construct(LoggerInterface $logger, string $exportTo, string $errExport = 'errors')
     {
         $this->logger = $logger;
-        $this->attribute = $attribute;
+        $this->exportTo = $exportTo;
+        $this->errExport = $errExport;
     }
 
     public function __invoke(ServerRequestInterface $request): ServerRequestInterface
     {
-        $errors = [];
-        $input = $this->getInput($request);
-        $data = $this->getFields($input, $errors, ['username', 'email', 'passwordHash']);
-        $userInfos = $this->validateFields($data, $errors);
-        if (empty($errors)) {
-            return $request->withAttribute($this->attribute, $userInfos);
-        }
-        return $request->withAttribute('errors', $errors);
+        $userInfos = $this->validateFields(self::INPUT_FIELDS, $request, $errors = []);
+        return empty($errors)
+            ? $request->withAttribute($this->exportTo, $userInfos)
+            : $request->withAttribute($this->errExport, $errors);
     }
 
     private function validateUsername($username, array &$errors): ?string
     {
-        $success = true;
         if (!is_string($username)) {
             $errors[] = 'Username must be a string.';
             return null;
         }
-        $length = mb_strlen($username);
-        if ($length < 3 || $length > 30) {
-            $errors[] = 'Username must be at least 3 and the most 30 chars long.';
+        if ($lengthErr = $this->checkLength('username', $username, self::NAME_MIN, self::NAME_MAX)) {
+            $errors[] = $lengthErr;
             return null;
         }
-        $username = trim($username);
         return $username;
     }
 
@@ -75,11 +88,24 @@ final class RegistrationValidator implements ValidationInterface
             $errors[] = 'PasswordHash must be a string.';
             return null;
         }
-        $length = mb_strlen($username);
-        if ($length < 3 || $length > 30) {
-            $errors[] = 'Password must be at least 3 and the most 30 chars long.';
+        if ($lengthErr = $this->checkLength('passwordHash', $passwordHash, self::PWD_MIN, self::PWD_MAX)) {
+            $errors[] = $lengthErr;
             return null;
         }
         return $passwordHash;
+    }
+
+    private function checkLength(string $fieldname, string $value, int $min, int $max): ?string
+    {
+        $length = mb_strlen($value);
+        if ($length < $min || $length > $max) {
+            return sprintf(
+                '%s must be at least %d and the most %d chars long.',
+                ucfirst($fieldname),
+                self::NAME_MIN,
+                self::NAME_MAX
+            );
+        }
+        return null;
     }
 }
