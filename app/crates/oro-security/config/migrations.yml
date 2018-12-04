@@ -1,0 +1,51 @@
+migration_loaders:
+  oro.security.event_store:
+    class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
+    connector: oro.security.filesystem
+    settings:
+      location: migration://couchdb
+
+  oro.security.projection_store.standard:
+    class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
+    connector: oro.security.filesystem
+    settings:
+      location: migration://elasticsearch
+
+  oro.security.message_queue:
+    class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
+    connector: oro.security.filesystem
+    settings:
+      location: migration://rabbitmq
+
+migration_adapters:
+  oro.security.event_store:
+    class: Daikon\CouchDb\Migration\CouchDbMigrationAdapter
+    connector: oro.security.event_store
+
+  oro.security.projection_store.standard:
+    class: Daikon\Elasticsearch5\Migration\Elasticsearch5MigrationAdapter
+    connector: oro.security.projection_store.standard
+    settings:
+      type: oro-security-migration_list
+
+  oro.security.message_queue:
+    class: Daikon\RabbitMq3\Migration\RabbitMq3MigrationAdapter
+    connector: oro.security.message_queue.admin
+    settings:
+      exchange: oro.security.migration_list
+
+migration_targets:
+  oro.security.event_store:
+    enabled: true
+    migration_adapter: oro.security.event_store
+    migration_loader: oro.security.event_store
+
+  oro.security.projection_store.standard:
+    enabled: true
+    migration_adapter: oro.security.projection_store.standard
+    migration_loader: oro.security.projection_store.standard
+
+  oro.security.message_queue:
+    enabled: true
+    migration_adapter: oro.security.message_queue
+    migration_loader: oro.security.message_queue

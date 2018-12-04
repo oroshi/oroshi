@@ -1,0 +1,19 @@
+storage_adapters:
+  oro.security.user.standard:
+    class: Daikon\Elasticsearch5\Storage\Elasticsearch5StorageAdapter
+    connector: oro.security.projection_store.standard
+    settings:
+      type: oro-security-user-standard
+
+projectors:
+  oro.security.user.standard:
+    class: Daikon\ReadModel\Projector\StandardProjector
+    repository: oro.security.user.standard
+    events:
+    - Oro\Security\User\Register\UserWasRegistered
+    - Oro\Security\User\Activate\UserWasActivated
+
+repositories:
+   oro.security.user.standard:
+     class: Oro\Security\ReadModel\Standard\UserRepository
+     storage_adapter: oro.security.user.standard

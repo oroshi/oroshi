@@ -1,0 +1,23 @@
+oro.security.event_store:
+  connector: oroshi.event_store
+  settings:
+    database: ${project.prefix}%2Boro-security
+
+oro.security.projection_store.standard:
+  connector: oroshi.projection_store.standard
+  settings:
+    index: ${project.prefix}.oro-security
+
+oro.security.filesystem:
+  connector: oroshi.filesystem
+  settings:
+    mounts:
+      migration:
+        adapter: League\Flysystem\Adapter\Local
+        location: ${crates.oro.security.migration_dir}
+
+oro.security.message_queue:
+  connector: oroshi.message_queue
+
+oro.security.message_queue.admin:
+  connector: oroshi.message_queue.admin

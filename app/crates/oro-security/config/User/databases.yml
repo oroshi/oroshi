@@ -1,0 +1,17 @@
+storage_adapters:
+  oro.security.user:
+    class: Daikon\CouchDb\Storage\CouchDbStorageAdapter
+    connector: oro.security.event_store
+    settings:
+      design_doc: oro-security-user
+
+stream_stores:
+  oro.security.user:
+    class: Daikon\CouchDb\Storage\CouchDbStreamStorage
+    storage_adapter: oro.security.user
+
+units_of_work:
+  oro.security.user:
+    class: Oroshi\DataAccess\UnitOfWork\UnitOfWork
+    stream_store: oro.security.user
+    aggregate_root: Oro\Security\User\User

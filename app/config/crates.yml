@@ -2,3 +2,8 @@ oro.testing:
   config_dir: crates:oro-testing/config
   migration_dir: crates:oro-testing/migration
   mount: /testing
+
+oro.security:
+  config_dir: crates:oro-security/config
+  migration_dir: crates:oro-security/migration
+  mount: /security
