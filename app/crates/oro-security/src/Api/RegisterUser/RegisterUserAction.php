@@ -21,19 +21,16 @@ final class RegisterUserAction implements ActionInterface
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->hasError($request)) {
-            return $this->errorResponse('Invalid registration request-data.', $request);
-        }
         $userInfos = $request->getAttribute(self::ATTR_INFOS);
         if ($this->userService->register($userInfos)) {
             return new JsonResponse(['message' => 'Successfully registered user.']);
         }
-        return new JsonResponse(['message' => 'Failed to register user.']);
+        return $this->errorResponse('Failed to register user.');
     }
 
-    public function isSecure(): bool
+    public function handleError(ServerRequestInterface $request): ResponseInterface
     {
-        return false;
+        return $this->errorResponse('Invalid registration request-data.', $request);
     }
 
     public function getValidation(): ?ValidationInterface
@@ -42,5 +39,10 @@ final class RegisterUserAction implements ActionInterface
             RegistrationValidator::class,
             [':attribute' => self::ATTR_INFOS]
         );
+    }
+
+    public function isSecure(): bool
+    {
+        return false;
     }
 }

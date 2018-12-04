@@ -17,4 +17,9 @@ final class LogoutAction implements ActionInterface
     {
         return new JsonResponse(['message' => 'not implemented yet']);
     }
+
+    public function handleError(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->errorResponse('Invalid logout request-data.', $request);
+    }
 }

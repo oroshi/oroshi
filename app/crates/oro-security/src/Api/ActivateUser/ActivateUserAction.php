@@ -21,19 +21,16 @@ final class ActivateUserAction implements ActionInterface
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->hasError($request)) {
-            return $this->errorResponse('Invalid activation request-data.', $request);
-        }
         $token = $request->getAttribute(self::ATTR_TOKEN);
         if ($user = $this->userService->activate($token)) {
             return new JsonResponse(['message' => 'Successfully activated user.']);
         }
-        return new JsonResponse(['message' => 'Failed to activate user.']);
+        return $this->errorResponse('Failed to activate user.');
     }
 
-    public function isSecure(): bool
+    public function handleError(ServerRequestInterface $request): ResponseInterface
     {
-        return false;
+        return $this->errorResponse('Invalid activation request-data.', $request);
     }
 
     public function getValidation(): ?ValidationInterface
@@ -42,5 +39,10 @@ final class ActivateUserAction implements ActionInterface
             ActivationValidator::class,
             [':attribute' => self::ATTR_TOKEN]
         );
+    }
+
+    public function isSecure(): bool
+    {
+        return false;
     }
 }

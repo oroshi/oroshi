@@ -21,7 +21,12 @@ final class LoginAction implements ActionInterface
         if ($user = $this->authenticate($request)) {
             return new JsonResponse(['token' => $this->userService->generateToken($user)]);
         }
-        return new JsonResponse(['message' => 'access restriced - invalid credentials'], 401);
+        return $this->errorResponse('Failed to login user.', $request);
+    }
+
+    public function handleError(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->errorResponse('Invalid login request-data.', $request);
     }
 
     private function authenticate(ServerRequestInterface $request): ?User
