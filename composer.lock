@@ -970,6 +970,52 @@
             "time": "2018-10-23T09:00:00+00:00"
         },
         {
+            "name": "firebase/php-jwt",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": " 4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "time": "2017-06-27T22:17:23+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.3.3",
             "source": {
@@ -1768,12 +1814,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroshi/oroshi-core.git",
-                "reference": "f2742b42b8962919d6a5bf0feec154d2a9ee0421"
+                "reference": "b7d005acaaf986147bb76346928ca377109a8b09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/f2742b42b8962919d6a5bf0feec154d2a9ee0421",
-                "reference": "f2742b42b8962919d6a5bf0feec154d2a9ee0421",
+                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/b7d005acaaf986147bb76346928ca377109a8b09",
+                "reference": "b7d005acaaf986147bb76346928ca377109a8b09",
                 "shasum": ""
             },
             "require": {
@@ -1787,6 +1833,7 @@
                 "daikon/flysystem-adapter": "master@dev",
                 "daikon/rabbitmq3-adapter": "master@dev",
                 "danielstjules/stringy": "^3.1",
+                "firebase/php-jwt": "^v5.0",
                 "middlewares/cors": "^v1.1",
                 "middlewares/negotiation": "^v1.1",
                 "middlewares/request-handler": "^v1.3",
@@ -1820,7 +1867,7 @@
             ],
             "description": "Provisioning and configuration of a Daikon CQRS (app) container.",
             "homepage": "https://github.com/oroshi/oroshi-core",
-            "time": "2018-12-02T21:24:22+00:00"
+            "time": "2018-12-04T15:32:35+00:00"
         },
         {
             "name": "paragonie/random_compat",
