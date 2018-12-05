@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Oro\Security\Api\ActivateUser;
 
-use function GuzzleHttp\Psr7\parse_query;
+use Oro\Security\Api\ErrorResponder;
 use Oro\Security\Api\UserActionTrait;
-use Oro\Security\ReadModel\Standard\User;
-use Oro\Security\ValueObject\RandomToken;
 use Oroshi\Core\Middleware\Action\ActionInterface;
 use Oroshi\Core\Middleware\ActionHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
 
 final class ActivateUserAction implements ActionInterface
 {
@@ -26,7 +23,7 @@ final class ActivateUserAction implements ActionInterface
             $user = $request->getAttribute(self::ATTR_USER);
             $this->userService->activate($user);
 
-            $responder = SuccessResponder::class;
+            $responder = ActivationResponder::class;
             $params = [':user' => $user];
         } catch (\Exception $error) {
             $errMsg = 'Unexpected error occured during activation.';
@@ -38,7 +35,7 @@ final class ActivateUserAction implements ActionInterface
         return $request->withAttribute(ActionHandler::ATTR_RESPONDER, [$responder, $params]);
     }
 
-    public function handleError(ServerRequestInterface $request): ResponseInterface
+    public function handleError(ServerRequestInterface $request): ServerRequestInterface
     {
         return $request->withAttribute(
             ActionHandler::ATTR_RESPONDER,

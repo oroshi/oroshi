@@ -95,6 +95,16 @@ final class UserProperties extends Entity
         return $this->get('tokens') ?? UserTokenList::makeEmpty();
     }
 
+    public function getAuthToken(): ?AuthToken
+    {
+        return $this->getTokens()->byType(AuthToken::class);
+    }
+
+    public function getVerifyToken(): ?VerifyToken
+    {
+        return $this->getTokens()->byType(VerifyToken::class);
+    }
+
     public function withAuthTokenAdded(AuthToken $authToken): self
     {
         return $this->withValue('tokens', $this->getTokens()->push($authToken));
@@ -103,5 +113,21 @@ final class UserProperties extends Entity
     public function withVerifyTokenAdded(VerifyToken $verifyToken): self
     {
         return $this->withValue('tokens', $this->getTokens()->push($verifyToken));
+    }
+
+    public function withAuthTokenRemoved(): self
+    {
+        if ($authToken = $this->getAuthToken()) {
+            return $this->withValue('tokens', $this->getTokens()->remove($authToken));
+        }
+        return $this;
+    }
+
+    public function withVerifyTokenRemoved(): self
+    {
+        if ($verifyToken = $this->getVerifyToken()) {
+            return $this->withValue('tokens', $this->getTokens()->remove($verifyToken));
+        }
+        return $this;
     }
 }

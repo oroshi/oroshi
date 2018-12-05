@@ -1814,12 +1814,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroshi/oroshi-core.git",
-                "reference": "1867e1e7608cb9fb9a39c7b0ac3bc5fd6a87d227"
+                "reference": "4005d8b8411d5420d928ffdc2342305ac9e17d99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/1867e1e7608cb9fb9a39c7b0ac3bc5fd6a87d227",
-                "reference": "1867e1e7608cb9fb9a39c7b0ac3bc5fd6a87d227",
+                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/4005d8b8411d5420d928ffdc2342305ac9e17d99",
+                "reference": "4005d8b8411d5420d928ffdc2342305ac9e17d99",
                 "shasum": ""
             },
             "require": {
@@ -1867,7 +1867,7 @@
             ],
             "description": "Provisioning and configuration of a Daikon CQRS (app) container.",
             "homepage": "https://github.com/oroshi/oroshi-core",
-            "time": "2018-12-05T02:20:52+00:00"
+            "time": "2018-12-05T03:06:15+00:00"
         },
         {
             "name": "paragonie/random_compat",

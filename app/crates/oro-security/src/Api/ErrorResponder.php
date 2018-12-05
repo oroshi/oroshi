@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oro\Security\Api;
 
-use Oro\Security\Api\ResponderTrait;
 use Oroshi\Core\Middleware\Action\ResponderInterface;
+use Oroshi\Core\Middleware\Action\ResponderTrait;
 use Oroshi\Core\Middleware\ActionHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -87,7 +87,9 @@ final class User implements ProjectionInterface
 
     public function toNative(): array
     {
-        return $this->userProps ? $this->userProps->toNative() : [];
+        $data = $this->userProps ? $this->userProps->toNative() : [];
+        $data['@type'] = self::class;
+        return $data;
     }
 
     private function whenUserWasRegistered(UserWasRegistered $userRegistered)
@@ -125,6 +127,7 @@ final class User implements ProjectionInterface
     {
         $this->userProps = $this->userProps
             ->adaptRevision($userActivated)
-            ->withState(UserState::fromNative(UserState::ACTIVATED));
+            ->withState(UserState::fromNative(UserState::ACTIVATED))
+            ->withVerifyTokenRemoved();
     }
 }

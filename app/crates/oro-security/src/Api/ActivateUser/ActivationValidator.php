@@ -53,17 +53,17 @@ final class ActivationValidator implements ValidatorInterface
                 return null;
             }
         }
-        return !is_null($user)
-            ? $request->withAttribute($this->exportTo, $user)
-            : $request->withAttribute($this->errExport, $errors);
+        return is_null($user)
+            ? $request->withAttribute($this->errExport, $errors)
+            : $request->withAttribute($this->exportTo, $user);
     }
 
-    private function validateToken($token, array &$output, array &$errors): ?User
+    private function validateVt($token, array &$errors): ?RandomToken
     {
         if (!is_string($token)) {
             $errors[] = 'Token must be a string.';
             return null;
         }
-        return $token;
+        return RandomToken::fromNative($token);
     }
 }

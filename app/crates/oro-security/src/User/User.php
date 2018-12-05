@@ -40,11 +40,14 @@ final class User implements AggregateRootInterface
 
     public function activate(ActivateUser $activateUser): self
     {
+        Assertion::notNull(
+            $this->verificationToken,
+            'User has not pending activation.'
+        );
         Assertion::true(
             !$this->currentState->isDeactivated() || !$this->currentState->isDeleted(),
             'User activation is not allowed within the current state.'
         );
-        // @todo check verification token, just in case?
         return $this->reflectThat(UserWasActivated::fromCommand($activateUser));
     }
 
@@ -78,5 +81,6 @@ final class User implements AggregateRootInterface
     protected function whenUserWasActivated(UserWasActivated $userActivated)
     {
         $this->currentState = UserState::fromNative(UserState::ACTIVATED);
+        $this->verificationToken = null;
     }
 }
