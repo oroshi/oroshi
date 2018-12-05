@@ -20,13 +20,32 @@ final class ActivateUserAction implements ActionInterface
 
     const ATTR_TOKEN = 'token';
 
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request): ServerRequestInterface
     {
         $token = $request->getAttribute(self::ATTR_TOKEN);
-        if ($user = $this->userService->activate($token)) {
-            return new JsonResponse(['message' => 'Successfully activated user.']);
+        try {
+            if ($user = $this->userService->activate($token)) {
+                $responder = SuccessResponder::class;
+                $params = [':user' => $user];
+            } else {
+                $responder = ErrorResponder::class;
+                $params = [':message' => 'Failed to activate user.'];
+            }
+        } catch (\Exception $error) {
+            $errMsg = 'Unexpected error occured during activation.';
+            $responder = ErrorResponder::class;
+            $params = [':message' => $errMsg];
+            $this->logger->error($errMsg, ['exception' => $error->getMessage()]);
         }
-        return $this->errorResponse('Failed to activate user.');
+        return $request->withAttribute(ActionHandler::ATTR_RESPONDER, [$responder, $params]);
+    }
+
+    public function handleError(ServerRequestInterface $request): ResponseInterface
+    {
+        return $request->withAttribute(
+            ActionHandler::ATTR_RESPONDER,
+            [ErrorResponder::class, [':message' => 'Invalid activation request-data.']]
+        );
     }
 
     public function registerValidator(ServerRequestInterface $request): ServerRequestInterface
@@ -35,11 +54,6 @@ final class ActivateUserAction implements ActionInterface
             ActionHandler::ATTR_VALIDATOR,
             [ActivationValidator::class, [':exportTo' => self::ATTR_TOKEN]]
         );
-    }
-
-    public function handleError(ServerRequestInterface $request): ResponseInterface
-    {
-        return $this->errorResponse('Invalid activation request-data.', $request);
     }
 
     public function isSecure(): bool

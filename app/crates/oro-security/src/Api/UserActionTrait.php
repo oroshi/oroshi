@@ -4,33 +4,21 @@ declare(strict_types=1);
 
 namespace Oro\Security\Api;
 
-use Assert\Assertion;
 use Oro\Security\UserService;
-use Oroshi\Core\Middleware\ValidationInterface;
-use Oroshi\Core\Service\Container;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Zend\Diactoros\Response\JsonResponse;
 
 trait UserActionTrait
 {
     /** @var LoggerInterface */
     private $logger;
 
-    /** @var Container */
-    private $container;
-
     /** @var UserService */
     private $userService;
 
-    public function __construct(
-        LoggerInterface $logger,
-        Container $container,
-        UserService $userService
-    ) {
+    public function __construct(LoggerInterface $logger, UserService $userService)
+    {
         $this->logger = $logger;
-        $this->container = $container;
         $this->userService = $userService;
     }
 
@@ -42,11 +30,5 @@ trait UserActionTrait
     public function registerValidator(ServerRequestInterface $request): ServerRequestInterface
     {
         return $request;
-    }
-
-    private function errorResponse(string $msg, ServerRequestInterface $request): ResponseInterface
-    {
-        $validationErrors = $request->getAttribute('errors', []);
-        return new JsonResponse(['message' => $msg, 'errors' => $validationErrors]);
     }
 }

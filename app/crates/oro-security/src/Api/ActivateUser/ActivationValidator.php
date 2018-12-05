@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oro\Security\Api\ActivateUser;
 
-use Oro\Security\Api\ValidatorTrait;
 use Oro\Security\ValueObject\RandomToken;
 use Oroshi\Core\Middleware\Action\ValidatorInterface;
+use Oroshi\Core\Middleware\Action\ValidatorTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 

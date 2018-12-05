@@ -79,7 +79,7 @@ final class UserService
         return $hash->verify($password) ? $user : null;
     }
 
-    public function generateToken(User $user): string
+    public function generateJWT(User $user): string
     {
         $secretKey = $this->configProvider->get('jwt.secret', 'foobar');
         return JWT::encode([
