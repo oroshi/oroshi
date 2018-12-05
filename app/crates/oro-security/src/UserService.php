@@ -18,13 +18,14 @@ use Oro\Security\User\Register\RegisterUser;
 use Oro\Security\ValueObject\PasswordHash;
 use Oro\Security\ValueObject\RandomToken;
 use Oro\Security\ValueObject\UserRole;
+use RuntimeException;
 
 final class UserService
 {
     const CHAN_COMMANDS = 'commands';
 
     /** @var ConfigProviderInterface */
-    private $configProvider;
+    private $config;
 
      /** @var MessageBusInterface */
     private $msgBus;
@@ -32,40 +33,33 @@ final class UserService
     /** @var Users */
     private $users;
 
-    public function __construct(
-        ConfigProviderInterface $configProvider,
-        MessageBusInterface $msgBus,
-        Users $users
-    ) {
-        $this->configProvider = $configProvider;
+    public function __construct(ConfigProviderInterface $config, MessageBusInterface $msgBus, Users $users)
+    {
+        $this->config = $config;
         $this->msgBus = $msgBus;
         $this->users = $users;
     }
 
-    public function register(array $userInfos, UserRole $role = null): ?RegisterUser
+    public function register(array $userInfos, UserRole $role = null): RegisterUser
     {
-        Assertion::keyExists($userInfos, 'passwordHash');
-        if (is_string($userInfos['passwordHash'])) {
-            $userInfos['passwordHash'] = (string)PasswordHash::gen($userInfos['passwordHash']);
-        }
-        if (!$role) {
-            $userInfos['role'] = $role ? (string)$role : 'user';
-        }
-        $userInfos['aggregateId'] = 'oro.security.user-'.Uuid::generate();
-        $userInfos['authTokenExpiresAt'] = gmdate(Timestamp::NATIVE_FORMAT, strtotime('+1 month'));
-        $registerUser = RegisterUser::fromNative($userInfos);
-        return $this->dispatch($registerUser) ? $registerUser : null;
+        Assertion::keyIsset($userInfos, 'passwordHash');
+        $userInfos = array_merge($userInfos, [
+            'role' => (string)($role ?? 'user'),
+            'aggregateId' => 'oro.security.user-'.Uuid::generate(),
+            'passwordHash' => (string)PasswordHash::gen($userInfos['passwordHash']),
+            'authTokenExpiresAt' => gmdate(Timestamp::NATIVE_FORMAT, strtotime('+1 month'))
+        ]);
+        $userRegistration = RegisterUser::fromNative($userInfos);
+        $this->dispatch($userRegistration);
+        return $userRegistration;
     }
 
-    public function activate(RandomToken $token): ?User
+    public function activate(User $user): void
     {
-        if (!$user = $this->users->byToken($token)) {
-            return null;
-        }
         $activateUser = ActivateUser::fromNative([
             'aggregateId' => (string)$user->getAggregateId()
         ]);
-        return $this->dispatch($activateUser) ? $user : null;
+        $this->dispatch($activateUser);
     }
 
     public function authenticate(string $username, string $password): ?User
@@ -81,10 +75,10 @@ final class UserService
 
     public function generateJWT(User $user): string
     {
-        $secretKey = $this->configProvider->get('jwt.secret', 'foobar');
+        $secretKey = $this->config->get('jwt.secret', 'foobar');
         return JWT::encode([
-            'iss' => $this->configProvider->get('project.name'),
-            'aud' => $this->configProvider->get('project.name'),
+            'iss' => $this->config->get('project.name'),
+            'aud' => $this->config->get('project.name'),
             'iat' => time(),
             'nbf' => time(),
             'exp' => time() + 60 * 60 * 24, // 1 day expiry period
@@ -97,8 +91,10 @@ final class UserService
         ], $secretKey);
     }
 
-    private function dispatch(CommandInterface $command): bool
+    private function dispatch(CommandInterface $command): void
     {
-        return $this->msgBus->publish($command, self::CHAN_COMMANDS);
+        if (!$this->msgBus->publish($command, self::CHAN_COMMANDS)) {
+            throw new RuntimeException(get_class($command).' was not handled by msg-bus.');
+        }
     }
 }

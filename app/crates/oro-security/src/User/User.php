@@ -24,6 +24,12 @@ final class User implements AggregateRootInterface
     /** @var UserState */
     private $currentState;
 
+    /** @var VerifyToken */
+    private $verificationToken;
+
+    /** @var AuthToken */
+    private $authToken;
+
     public static function register(RegisterUser $registerUser): self
     {
         return (new self($registerUser->getAggregateId()))
@@ -34,6 +40,11 @@ final class User implements AggregateRootInterface
 
     public function activate(ActivateUser $activateUser): self
     {
+        Assertion::true(
+            !$this->currentState->isDeactivated() || !$this->currentState->isDeleted(),
+            'User activation is not allowed within the current state.'
+        );
+        // @todo check verification token, just in case?
         return $this->reflectThat(UserWasActivated::fromCommand($activateUser));
     }
 
@@ -44,27 +55,28 @@ final class User implements AggregateRootInterface
 
     protected function whenUserWasRegistered(UserWasRegistered $userRegistered)
     {
-        Assertion::null(
-            $this->currentState,
-            'Current state expected to be empty upon registration.'
-        );
         $this->currentState = UserState::fromNative(UserState::UNVERIFIED);
     }
 
     protected function whenAuthTokenWasAdded(AuthTokenWasAdded $tokenAdded)
     {
+        $this->authToken = AuthToken::fromNative([
+            'id' => (string)$tokenAdded->getId(),
+            'token' => (string)$tokenAdded->getToken(),
+            'expiresAt' => (string)$tokenAdded->getExpiresAt()
+        ]);
     }
 
     protected function whenVerifyTokenWasAdded(VerifyTokenWasAdded $tokenAdded)
     {
+        $this->verificationToken = VerifyToken::fromNative([
+            'id' => (string)$tokenAdded->getId(),
+            'token' => (string)$tokenAdded->getToken()
+        ]);
     }
 
     protected function whenUserWasActivated(UserWasActivated $userActivated)
     {
-        Assertion::true(
-            !$this->currentState->isDeactivated() || !$this->currentState->isDeleted(),
-            'User activation is not allowed within the current state.'
-        );
         $this->currentState = UserState::fromNative(UserState::ACTIVATED);
     }
 }

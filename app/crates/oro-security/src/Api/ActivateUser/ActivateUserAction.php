@@ -18,24 +18,22 @@ final class ActivateUserAction implements ActionInterface
 {
     use UserActionTrait;
 
-    const ATTR_TOKEN = 'token';
+    const ATTR_USER = 'user';
 
     public function __invoke(ServerRequestInterface $request): ServerRequestInterface
     {
-        $token = $request->getAttribute(self::ATTR_TOKEN);
         try {
-            if ($user = $this->userService->activate($token)) {
-                $responder = SuccessResponder::class;
-                $params = [':user' => $user];
-            } else {
-                $responder = ErrorResponder::class;
-                $params = [':message' => 'Failed to activate user.'];
-            }
+            $user = $request->getAttribute(self::ATTR_USER);
+            $this->userService->activate($user);
+
+            $responder = SuccessResponder::class;
+            $params = [':user' => $user];
         } catch (\Exception $error) {
             $errMsg = 'Unexpected error occured during activation.';
+            $this->logger->error($errMsg, ['exception' => $error]);
+
             $responder = ErrorResponder::class;
             $params = [':message' => $errMsg];
-            $this->logger->error($errMsg, ['exception' => $error->getMessage()]);
         }
         return $request->withAttribute(ActionHandler::ATTR_RESPONDER, [$responder, $params]);
     }
@@ -52,7 +50,7 @@ final class ActivateUserAction implements ActionInterface
     {
         return $request->withAttribute(
             ActionHandler::ATTR_VALIDATOR,
-            [ActivationValidator::class, [':exportTo' => self::ATTR_TOKEN]]
+            [ActivationValidator::class, [':exportTo' => self::ATTR_USER]]
         );
     }
 

@@ -23,9 +23,8 @@ final class LoginAction implements ActionInterface
 
     public function __invoke(ServerRequestInterface $request): ServerRequestInterface
     {
-        $login = $request->getAttribute(self::ATTR_LOGIN);
         try {
-            if ($user = $this->userService->authenticate(...$login)) {
+            if ($user = $this->userService->authenticate(...$request->getAttribute(self::ATTR_LOGIN))) {
                 $responder = LoginResponder::class;
                 $params = [':user' => $user, ':token' => $this->userService->generateJWT($user)];
             } else {
@@ -34,9 +33,10 @@ final class LoginAction implements ActionInterface
             }
         } catch (\Exception $error) {
             $errMsg = 'Unexpected error occured during login.';
+            $this->logger->error($errMsg, ['exception' => $error->getMessage()]);
+
             $responder = ErrorResponder::class;
             $params = [':message' => $errMsg];
-            $this->logger->error($errMsg, ['exception' => $error->getMessage()]);
         }
         return $request->withAttribute(ActionHandler::ATTR_RESPONDER, [$responder, $params]);
     }

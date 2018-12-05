@@ -23,20 +23,17 @@ final class RegisterUserAction implements ActionInterface
 
     public function __invoke(ServerRequestInterface $request): ServerRequestInterface
     {
-        $userInfos = $request->getAttribute(self::ATTR_INFOS);
         try {
-            if ($registration = $this->userService->register($userInfos)) {
-                $responder = RegistrationResponder::class;
-                $params = [':registration' => $registration];
-            } else {
-                $responder = ErrorResponder::class;
-                $params = [':message' => 'Failed to register user.'];
-            }
+            $registration = $this->userService->register($request->getAttribute(self::ATTR_INFOS));
+
+            $responder = RegistrationResponder::class;
+            $params = [':registration' => $registration];
         } catch (\Exception $error) {
-            $errMsg = 'Unexpected error occured during registration.';
+            $errorMsg = 'An unexpected error occured during registration.';
+            $this->logger->error($errorMsg, ['exception' => $error]);
+
             $responder = ErrorResponder::class;
-            $params = [':message' => $errMsg];
-            $this->logger->error($errMsg, ['exception' => $error->getMessage()]);
+            $params = [':message' => $errorMsg];
         }
         return $request->withAttribute(ActionHandler::ATTR_RESPONDER, [$responder, $params]);
     }
