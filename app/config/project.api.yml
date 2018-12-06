@@ -1,0 +1,9 @@
+#
+# Project settings for the web context
+#
+
+cors:
+  enabled: true
+  scheme: https
+  host: '*'
+  port: '*'

@@ -6,3 +6,9 @@ name: Oroshi
 version: ${app.version}
 description: 'Boilerplate setup for Daikon CQRS based PHP7.2 applications.'
 prefix: oroshi
+i18n:
+  languages:
+    - en
+    - de
+jwt:
+  secret: 'changeme'
