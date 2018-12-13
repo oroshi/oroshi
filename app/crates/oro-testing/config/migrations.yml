@@ -5,7 +5,7 @@ migration_loaders:
     settings:
       location: migration://couchdb
 
-  oro.testing.projection_store.standard:
+  oro.testing.projection_store:
     class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
     connector: oro.testing.filesystem
     settings:
@@ -22,10 +22,11 @@ migration_adapters:
     class: Daikon\CouchDb\Migration\CouchDbMigrationAdapter
     connector: oro.testing.event_store
 
-  oro.testing.projection_store.standard:
+  oro.testing.projection_store:
     class: Daikon\Elasticsearch6\Migration\Elasticsearch6MigrationAdapter
-    connector: oro.testing.projection_store.standard
+    connector: oro.testing.projection_store
     settings:
+      index: ${project.prefix}.oro-testing.migration_list
       type: oro-testing-migration_list
 
   oro.testing.message_queue:
@@ -40,10 +41,10 @@ migration_targets:
     migration_adapter: oro.testing.event_store
     migration_loader: oro.testing.event_store
 
-  oro.testing.projection_store.standard:
+  oro.testing.projection_store:
     enabled: true
-    migration_adapter: oro.testing.projection_store.standard
-    migration_loader: oro.testing.projection_store.standard
+    migration_adapter: oro.testing.projection_store
+    migration_loader: oro.testing.projection_store
 
   oro.testing.message_queue:
     enabled: true

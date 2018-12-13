@@ -23,7 +23,7 @@ final class CreateStandardArticleResource20170707191919 implements MigrationInte
 
     private function up(): void
     {
-        $alias = $this->getIndexName();
+        $alias = $this->getIndexPrefix().'.article.standard';
         $index = sprintf('%s.%d', $alias, $this->getVersion());
         $this->createIndex($index, $this->loadFile('index-settings.json'));
         $this->createAlias($index, $alias);
@@ -35,8 +35,8 @@ final class CreateStandardArticleResource20170707191919 implements MigrationInte
 
     private function down(): void
     {
-        $alias = $this->getIndexName();
-        $index = current($this->getIndicesWithAlias($alias));
+        $alias = $this->getIndexPrefix().'.article.standard';
+        $index = sprintf('%s.%d', $alias, $this->getVersion());
         $this->deleteIndex($index);
     }
 

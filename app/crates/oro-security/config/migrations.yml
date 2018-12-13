@@ -5,7 +5,7 @@ migration_loaders:
     settings:
       location: migration://couchdb
 
-  oro.security.projection_store.standard:
+  oro.security.projection_store:
     class: Daikon\Flysystem\Migration\FlysystemMigrationLoader
     connector: oro.security.filesystem
     settings:
@@ -22,10 +22,11 @@ migration_adapters:
     class: Daikon\CouchDb\Migration\CouchDbMigrationAdapter
     connector: oro.security.event_store
 
-  oro.security.projection_store.standard:
+  oro.security.projection_store:
     class: Daikon\Elasticsearch6\Migration\Elasticsearch6MigrationAdapter
-    connector: oro.security.projection_store.standard
+    connector: oro.security.projection_store
     settings:
+      index: ${project.prefix}.oro-security.migration_list
       type: oro-security-migration_list
 
   oro.security.message_queue:
@@ -40,10 +41,10 @@ migration_targets:
     migration_adapter: oro.security.event_store
     migration_loader: oro.security.event_store
 
-  oro.security.projection_store.standard:
+  oro.security.projection_store:
     enabled: true
-    migration_adapter: oro.security.projection_store.standard
-    migration_loader: oro.security.projection_store.standard
+    migration_adapter: oro.security.projection_store
+    migration_loader: oro.security.projection_store
 
   oro.security.message_queue:
     enabled: true

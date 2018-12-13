@@ -3,10 +3,10 @@ oro.testing.event_store:
   settings:
     database: ${project.prefix}%2Boro-testing
 
-oro.testing.projection_store.standard:
+oro.testing.projection_store:
   connector: oroshi.projection_store
   settings:
-    index: ${project.prefix}.oro-testing
+    index_prefix: ${project.prefix}.oro-testing
 
 oro.testing.filesystem:
   connector: oroshi.filesystem

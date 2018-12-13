@@ -3,10 +3,10 @@ oro.security.event_store:
   settings:
     database: ${project.prefix}%2Boro-security
 
-oro.security.projection_store.standard:
+oro.security.projection_store:
   connector: oroshi.projection_store
   settings:
-    index: ${project.prefix}.oro-security
+    index_prefix: ${project.prefix}.oro-security
 
 oro.security.filesystem:
   connector: oroshi.filesystem

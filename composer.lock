@@ -341,12 +341,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/elasticsearch6-adapter.git",
-                "reference": "afb0517188deed24b6c024d3a77e633834de25b7"
+                "reference": "5f25a8272fa82d91742d9883386fc74df430ccce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/elasticsearch6-adapter/zipball/afb0517188deed24b6c024d3a77e633834de25b7",
-                "reference": "afb0517188deed24b6c024d3a77e633834de25b7",
+                "url": "https://api.github.com/repos/daikon-cqrs/elasticsearch6-adapter/zipball/5f25a8272fa82d91742d9883386fc74df430ccce",
+                "reference": "5f25a8272fa82d91742d9883386fc74df430ccce",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +377,7 @@
                 "adapter",
                 "elasticsearch"
             ],
-            "time": "2018-12-13T17:57:57+00:00"
+            "time": "2018-12-13T22:54:41+00:00"
         },
         {
             "name": "daikon/entity",
@@ -1816,12 +1816,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroshi/oroshi-core.git",
-                "reference": "1a0a82f0b5472640d272e782433f65352920edd7"
+                "reference": "5dd9c5d66e66f618673d20862a85fcca885498cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/1a0a82f0b5472640d272e782433f65352920edd7",
-                "reference": "1a0a82f0b5472640d272e782433f65352920edd7",
+                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/5dd9c5d66e66f618673d20862a85fcca885498cd",
+                "reference": "5dd9c5d66e66f618673d20862a85fcca885498cd",
                 "shasum": ""
             },
             "require": {
@@ -1869,7 +1869,7 @@
             ],
             "description": "Provisioning and configuration of a Daikon CQRS (app) container.",
             "homepage": "https://github.com/oroshi/oroshi-core",
-            "time": "2018-12-13T18:02:45+00:00"
+            "time": "2018-12-13T22:57:16+00:00"
         },
         {
             "name": "paragonie/random_compat",
