@@ -4,7 +4,7 @@ oro.testing.event_store:
     database: ${project.prefix}%2Boro-testing
 
 oro.testing.projection_store.standard:
-  connector: oroshi.projection_store.standard
+  connector: oroshi.projection_store
   settings:
     index: ${project.prefix}.oro-testing
 

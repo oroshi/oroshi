@@ -1,6 +1,6 @@
 storage_adapters:
   oro.security.user.standard:
-    class: Daikon\Elasticsearch5\Storage\Elasticsearch5StorageAdapter
+    class: Daikon\Elasticsearch6\Storage\Elasticsearch6StorageAdapter
     connector: oro.security.projection_store.standard
     settings:
       type: oro-security-user-standard

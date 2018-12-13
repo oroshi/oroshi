@@ -30,8 +30,10 @@ services:
       - xpack.monitoring.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
 
-  elasticsearch-head:
-    container_name: elasticsearch-head
-    image: mobz/elasticsearch-head:5
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:6.5.3
     ports:
-      - "9100:9100"
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200

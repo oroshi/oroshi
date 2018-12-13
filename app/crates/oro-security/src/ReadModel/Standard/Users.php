@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oro\Security\ReadModel\Standard;
 
-use Daikon\Elasticsearch5\Query\Elasticsearch5Query;
+use Daikon\Elasticsearch6\Query\Elasticsearch6Query;
 use Daikon\ReadModel\Repository\RepositoryMap;
 use Oro\Security\ValueObject\RandomToken;
 
@@ -45,7 +45,7 @@ final class Users
     private function selectOne(array $query): ?User
     {
         $foundUsers = $this->userRepo
-            ->search(Elasticsearch5Query::fromNative(['query' => $query]), 0, 1)
+            ->search(Elasticsearch6Query::fromNative(['query' => $query]), 0, 1)
             ->getIterator();
 
         return $foundUsers->valid() ? $foundUsers->current() : null;

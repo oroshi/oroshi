@@ -23,7 +23,7 @@ migration_adapters:
     connector: oro.testing.event_store
 
   oro.testing.projection_store.standard:
-    class: Daikon\Elasticsearch5\Migration\Elasticsearch5MigrationAdapter
+    class: Daikon\Elasticsearch6\Migration\Elasticsearch6MigrationAdapter
     connector: oro.testing.projection_store.standard
     settings:
       type: oro-testing-migration_list

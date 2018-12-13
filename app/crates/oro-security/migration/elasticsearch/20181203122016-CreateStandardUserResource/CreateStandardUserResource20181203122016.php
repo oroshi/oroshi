@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Oro\Security\Migration\Elasticsearch;
 
 use Daikon\Dbal\Migration\MigrationInterface;
-use Daikon\Elasticsearch5\Migration\Elasticsearch5MigrationTrait;
+use Daikon\Elasticsearch6\Migration\Elasticsearch6MigrationTrait;
 
-final class CreateUserResource20181203122016 implements MigrationInterface
+final class CreateStandardUserResource20181203122016 implements MigrationInterface
 {
-    use Elasticsearch5MigrationTrait;
+    use Elasticsearch6MigrationTrait;
 
     public function getDescription(string $direction = self::MIGRATE_UP): string
     {
         return $direction === self::MIGRATE_UP
-            ? 'Create User resource standard projection Elasticsearch mapping.'
-            : 'Delete User resource standard projection Elasticsearch mapping.';
+            ? 'Create the User resource standard projection Elasticsearch index.'
+            : 'Delete the User resource standard projection Elasticsearch index.';
     }
 
     public function isReversible(): bool
@@ -25,8 +25,12 @@ final class CreateUserResource20181203122016 implements MigrationInterface
 
     private function up(): void
     {
+        $alias = $this->getIndexName();
+        $index = sprintf('%s.%d', $alias, $this->getVersion());
+        $this->createIndex($index, $this->loadFile('index-settings.json'));
+        $this->createAlias($index, $alias);
         $this->putMappings(
-            $this->getIndexName(),
+            $alias,
             ['oro-security-user-standard' => $this->loadFile('user-standard-mapping-20181203122016.json')]
         );
     }
@@ -34,11 +38,8 @@ final class CreateUserResource20181203122016 implements MigrationInterface
     private function down(): void
     {
         $alias = $this->getIndexName();
-        $currentIndex = current($this->getIndicesWithAlias($alias));
-        $revertedIndex = $currentIndex.'.reverted';
-        $this->reindexWithMappings($currentIndex, $revertedIndex, ['oro-security-user-standard' => null]);
-        $this->reassignAlias($revertedIndex, $alias);
-        $this->deleteIndex($currentIndex);
+        $index = current($this->getIndicesWithAlias($alias));
+        $this->deleteIndex($index);
     }
 
     private function loadFile(string $filename): array

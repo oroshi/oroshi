@@ -3,17 +3,17 @@
 namespace Oro\Testing\Migration\Elasticsearch;
 
 use Daikon\Dbal\Migration\MigrationInterface;
-use Daikon\Elasticsearch5\Migration\Elasticsearch5MigrationTrait;
+use Daikon\Elasticsearch6\Migration\Elasticsearch6MigrationTrait;
 
-final class InitializeStandardProjectionStore20170707181818 implements MigrationInterface
+final class InitializeProjectionStore20170707181818 implements MigrationInterface
 {
-    use Elasticsearch5MigrationTrait;
+    use Elasticsearch6MigrationTrait;
 
     public function getDescription(string $direction = self::MIGRATE_UP): string
     {
         return $direction === self::MIGRATE_UP
-            ? 'Create the Elasticsearch index for the Oro-Testing context.'
-            : 'Delete the Elasticsearch index for the Oro-Testing context.';
+            ? 'Create the Elasticsearch migration list for the Oro-Testing context.'
+            : 'Delete the Elasticsearch migration list for the Oro-Testing context.';
     }
 
     public function isReversible(): bool
@@ -23,10 +23,8 @@ final class InitializeStandardProjectionStore20170707181818 implements Migration
 
     private function up(): void
     {
-        $alias = $this->getIndexName();
-        $index = sprintf('%s.%d', $alias, $this->getVersion());
+        $index = "{$this->getIndexName()}.migration_list";
         $this->createIndex($index, $this->loadFile('index-settings.json'));
-        $this->createAlias($index, $alias);
         $this->putMappings($index, [
             'oro-testing-migration_list' => $this->loadFile('migration_list-mapping-20170707181818.json')
         ]);
@@ -34,7 +32,8 @@ final class InitializeStandardProjectionStore20170707181818 implements Migration
 
     private function down(): void
     {
-        $this->deleteIndex($this->getIndexName());
+        $index = "{$this->getIndexName()}.migration_list";
+        $this->deleteIndex($index);
     }
 
     private function loadFile(string $filename): array

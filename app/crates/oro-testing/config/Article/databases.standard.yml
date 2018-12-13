@@ -1,6 +1,6 @@
 storage_adapters:
   oro.testing.article.standard:
-    class: Daikon\Elasticsearch5\Storage\Elasticsearch5StorageAdapter
+    class: Daikon\Elasticsearch6\Storage\Elasticsearch6StorageAdapter
     connector: oro.testing.projection_store.standard
     settings:
       type: oro-testing-article-standard

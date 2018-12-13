@@ -3,17 +3,17 @@
 namespace Oro\Testing\Migration\Elasticsearch;
 
 use Daikon\Dbal\Migration\MigrationInterface;
-use Daikon\Elasticsearch5\Migration\Elasticsearch5MigrationTrait;
+use Daikon\Elasticsearch6\Migration\Elasticsearch6MigrationTrait;
 
 final class CreateStandardArticleResource20170707191919 implements MigrationInterface
 {
-    use Elasticsearch5MigrationTrait;
+    use Elasticsearch6MigrationTrait;
 
     public function getDescription(string $direction = self::MIGRATE_UP): string
     {
         return $direction === self::MIGRATE_UP
-            ? 'Create Article resource standard projection Elasticsearch mapping.'
-            : 'Delete Article resource standard projection Elasticsearch mapping.';
+            ? 'Create the Article resource standard projection Elasticsearch index.'
+            : 'Delete the Article resource standard projection Elasticsearch index.';
     }
 
     public function isReversible(): bool
@@ -23,8 +23,12 @@ final class CreateStandardArticleResource20170707191919 implements MigrationInte
 
     private function up(): void
     {
+        $alias = $this->getIndexName();
+        $index = sprintf('%s.%d', $alias, $this->getVersion());
+        $this->createIndex($index, $this->loadFile('index-settings.json'));
+        $this->createAlias($index, $alias);
         $this->putMappings(
-            $this->getIndexName(),
+            $alias,
             ['oro-testing-article-standard' => $this->loadFile('article-standard-mapping-20170707191919.json')]
         );
     }
@@ -32,11 +36,8 @@ final class CreateStandardArticleResource20170707191919 implements MigrationInte
     private function down(): void
     {
         $alias = $this->getIndexName();
-        $currentIndex = current($this->getIndicesWithAlias($alias));
-        $revertedIndex = $currentIndex.'.reverted';
-        $this->reindexWithMappings($currentIndex, $revertedIndex, ['oro-testing-article-standard' => null]);
-        $this->reassignAlias($revertedIndex, $alias);
-        $this->deleteIndex($currentIndex);
+        $index = current($this->getIndicesWithAlias($alias));
+        $this->deleteIndex($index);
     }
 
     private function loadFile(string $filename): array

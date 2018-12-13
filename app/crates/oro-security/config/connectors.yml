@@ -4,7 +4,7 @@ oro.security.event_store:
     database: ${project.prefix}%2Boro-security
 
 oro.security.projection_store.standard:
-  connector: oroshi.projection_store.standard
+  connector: oroshi.projection_store
   settings:
     index: ${project.prefix}.oro-security
 
