@@ -25,7 +25,7 @@ final class CreateStandardUserResource20181203122016 implements MigrationInterfa
 
     private function up(): void
     {
-        $alias = $this->getIndexPrefix().'.user.standard';
+        $alias = $this->getAlias();
         $index = sprintf('%s.%d', $alias, $this->getVersion());
         $this->createIndex($index, $this->loadFile('index-settings.json'));
         $this->createAlias($index, $alias);
@@ -37,13 +37,17 @@ final class CreateStandardUserResource20181203122016 implements MigrationInterfa
 
     private function down(): void
     {
-        $alias = $this->getIndexPrefix().'.user.standard';
-        $index = sprintf('%s.%d', $alias, $this->getVersion());
+        $index = current($this->getIndicesWithAlias($this->getAlias()));
         $this->deleteIndex($index);
     }
 
     private function loadFile(string $filename): array
     {
         return json_decode(file_get_contents(__DIR__.'/'.$filename), true);
+    }
+
+    private function getAlias(): string
+    {
+        return $this->getIndexPrefix().'.user.standard';
     }
 }
