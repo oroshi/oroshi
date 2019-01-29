@@ -644,12 +644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/read-model.git",
-                "reference": "3cd238fea20af2c4d28f17a8f2d0264edf99f79f"
+                "reference": "7be1b9eaf404a6667c6fc027c0ed6593b4218596"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/read-model/zipball/3cd238fea20af2c4d28f17a8f2d0264edf99f79f",
-                "reference": "3cd238fea20af2c4d28f17a8f2d0264edf99f79f",
+                "url": "https://api.github.com/repos/daikon-cqrs/read-model/zipball/7be1b9eaf404a6667c6fc027c0ed6593b4218596",
+                "reference": "7be1b9eaf404a6667c6fc027c0ed6593b4218596",
                 "shasum": ""
             },
             "require": {
@@ -684,7 +684,7 @@
                 "read-model",
                 "repository"
             ],
-            "time": "2019-01-29T15:29:05+00:00"
+            "time": "2019-01-29T18:01:16+00:00"
         },
         {
             "name": "danielstjules/stringy",
@@ -1816,12 +1816,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroshi/oroshi-core.git",
-                "reference": "54e38fb5367fb6b09788ac66ca7b90faf1cdd7ef"
+                "reference": "f00235f592146ab0bde98538e6d05ef40b388dab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/54e38fb5367fb6b09788ac66ca7b90faf1cdd7ef",
-                "reference": "54e38fb5367fb6b09788ac66ca7b90faf1cdd7ef",
+                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/f00235f592146ab0bde98538e6d05ef40b388dab",
+                "reference": "f00235f592146ab0bde98538e6d05ef40b388dab",
                 "shasum": ""
             },
             "require": {
@@ -1869,7 +1869,7 @@
             ],
             "description": "Provisioning and configuration of a Daikon CQRS (app) container.",
             "homepage": "https://github.com/oroshi/oroshi-core",
-            "time": "2019-01-29T15:41:50+00:00"
+            "time": "2019-01-29T18:10:38+00:00"
         },
         {
             "name": "paragonie/random_compat",
