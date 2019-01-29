@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "543b71204a87af79d0e59b7e0bf429ab",
+    "content-hash": "24bf8b0100edc839301569269a80f065",
     "packages": [
         {
             "name": "aura/router",
@@ -1812,7 +1812,7 @@
         },
         {
             "name": "oroshi/oroshi-core",
-            "version": "dev-feature/es6",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroshi/oroshi-core.git",
