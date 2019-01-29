@@ -22,5 +22,5 @@ RUN docker-php-ext-install -j$(nproc) \
     bcmath \
     pcntl \
     opcache
-RUN pecl install ev-1.0.3 zmq-1.1.3 xdebug-2.6.1 mcrypt-1.0.1 \
+RUN pecl install ev-1.0.4 zmq-1.1.3 xdebug-2.6.1 mcrypt-1.0.2 \
   && docker-php-ext-enable ev zmq mcrypt
