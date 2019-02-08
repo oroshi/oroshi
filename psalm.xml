@@ -9,7 +9,7 @@
      */
 -->
 <psalm
-    name="Daikon-CQRS flavored psalm configuration"
+    name="Oroshi flavored psalm configuration"
     useDocblockTypes="true"
     totallyTyped="false"
     allowFileIncludes="true"

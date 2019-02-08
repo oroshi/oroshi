@@ -1,9 +1,11 @@
+oro.security:
+  config_dir: vendor:oroshi/oro-security/config
+  migration_dir: vendor:oroshi/oro-security/migration
+  fixture_dir: vendor:oroshi/oro-security/fixture
+  mount: ''
+
 oro.testing:
   config_dir: crates:oro-testing/config
   migration_dir: crates:oro-testing/migration
-  mount: /testing
-
-oro.security:
-  config_dir: crates:oro-security/config
-  migration_dir: crates:oro-security/migration
-  mount: /security
+  fixture_dir: crates:oro-testing/fixture
+  mount: '/testing'

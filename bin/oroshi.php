@@ -12,6 +12,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 
 $baseDir = dirname(__DIR__);
+/** @psalm-suppress UnresolvableInclude */
 require_once "$baseDir/vendor/autoload.php";
 
 $appDir = "$baseDir/app";

@@ -1,11 +1,12 @@
 # Oroshi
-Boilerplate setup for Daikon CQRS based PHP7.2 applications.
+Boilerplate for Daikon CQRS based PHP7 applications.
 
 ```
 $ composer --ignore-platform-reqs install
 $ docker-compose up -d
 # wait a few moments while cluster initialises
 $ bin/oroshi migrate:up
+$ bin/oroshi fixture:import
 ```
 
 ## Endpoints for testing:

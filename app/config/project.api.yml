@@ -4,6 +4,7 @@
 
 cors:
   enabled: true
-  scheme: https
-  host: '*'
-  port: '*'
+  host: localhost
+  allowed_origins: ['*']
+  allowed_methods: ['GET', 'POST']
+  allowed_headers: ['content-type']

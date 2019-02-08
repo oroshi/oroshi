@@ -1,7 +1,5 @@
 <?php
 
-use Oroshi\CreateArticleAction;
-use Oroshi\UpdateArticleAction;
 use Zend\Diactoros\Response\JsonResponse;
 
 $map->get('index', '/', function () {

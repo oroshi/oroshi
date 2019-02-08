@@ -1,15 +1,15 @@
 {
     "name": "daikon/oroshi",
     "type": "project",
-    "description": "Boilerplate setup for Daikon CQRS based PHP7.2 applications.",
+    "description": "Boilerplate for Daikon CQRS based PHP7 applications.",
     "homepage": "https://github.com/daikon/oroshi",
     "license": "MPL-2.0",
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
         "php": "^7.2",
-        "oroshi/oroshi-core": "master@dev",
-        "egulias/email-validator": "^2.1"
+        "oroshi/oro-security": "master@dev",
+        "oroshi/oroshi-core": "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4",
@@ -19,8 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Oro\\Testing\\": "app/crates/oro-testing/src",
-            "Oro\\Security\\": "app/crates/oro-security/src"
+            "Oro\\Testing\\": "app/crates/oro-testing/src"
         }
     },
     "autoload-dev": {
@@ -34,9 +33,9 @@
     },
     "scripts": {
         "build": [ "@sniff", "@tests" ],
-        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' app/lib tests/",
-        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 src/ tests/",
-        "copy-paste-detector": "phpcpd app/lib tests/ || true",
+        "code-sniffer": "phpcs -p -s --extensions=php --standard='PSR1,PSR2' app/crates app/lib tests/",
+        "code-sniffer-autofix": "phpcbf --standard=PSR2 -d tabWidth=4 app/crates app/lib tests/",
+        "copy-paste-detector": "phpcpd app/crates app/lib tests/ || true",
         "sniff": [
             "@code-sniffer",
             "@copy-paste-detector",

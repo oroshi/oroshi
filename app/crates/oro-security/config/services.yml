@@ -1,4 +1,0 @@
-oroshi:
-  http_pipeline:
-    default_actions:
-      login: Oro\Security\Api\Login\LoginAction

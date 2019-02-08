@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+//@todo move to debug context
 ini_set('display_errors', 'on');
 ini_set('xdebug.default_enable', 'on');
 
@@ -12,6 +13,7 @@ use Zend\Diactoros\ServerRequestFactory;
 use Zend\HttpHandlerRunner\Emitter\SapiStreamEmitter;
 
 $baseDir = dirname(__DIR__);
+/** @psalm-suppress UnresolvableInclude */
 require_once "$baseDir/vendor/autoload.php";
 
 $appDir = "$baseDir/app";

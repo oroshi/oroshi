@@ -43,7 +43,9 @@ final class UpdateStandardArticleResource20181213191919 implements MigrationInte
         $this->reindexWithMappings(
             $currentIndex,
             $revertedIndex,
-            ['oro-testing-article-standard' => $this->loadFile('../20170707191919-CreateStandardArticleResource/article-standard-mapping-20170707191919.json')]
+            ['oro-testing-article-standard' => $this->loadFile(
+                '../20170707191919-CreateStandardArticleResource/article-standard-mapping-20170707191919.json'
+            )]
         );
         $this->reassignAlias($revertedIndex, $alias);
         $this->deleteIndex($currentIndex);
