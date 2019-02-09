@@ -4,7 +4,16 @@
 
 cors:
   enabled: true
+  scheme: http
   host: localhost
-  allowed_origins: ['*']
-  allowed_methods: ['GET', 'POST']
-  allowed_headers: ['content-type']
+  request:
+    allowed_origins: ['*']
+    allowed_headers: ['accept', 'origin', 'content-type', 'x-xsrf-token']
+    allowed_methods: ['GET', 'POST', 'PUT', 'DELETE']
+    allowed_credentials: true
+  response:
+    preflight_cache_max_age: 600
+    exposed_headers:
+      - Access-Control-Allow-Origin
+      - Access-Control-Allow-Credentials
+      - Access-Control-Max-Age

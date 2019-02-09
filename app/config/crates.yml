@@ -3,6 +3,13 @@ oro.security:
   migration_dir: vendor:oroshi/oro-security/migration
   fixture_dir: vendor:oroshi/oro-security/fixture
   mount: ''
+  login:
+    token_expiry: +1 month
+  jwt:
+    issuer: ${project.name}
+    audience: ${project.name}
+    secret: 'changeme'
+
 
 oro.testing:
   config_dir: crates:oro-testing/config

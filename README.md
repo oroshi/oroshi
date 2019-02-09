@@ -15,6 +15,10 @@ $ bin/oroshi fixture:import
   - http://localhost
   - http://localhost/testing/article/create
   - http://localhost/testing/article/update
+  - http://localhost/login
+  - http://localhost/logout
+  - http://localhost/activate
+  - http://localhost/users/me
 - CouchDB Admin: http://localhost:5984/_utils/
 - RabbitMQ Admin: http://localhost:15672 (rabbit/changme)
 - Kibana: http://localhost:5601

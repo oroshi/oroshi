@@ -1,8 +1,8 @@
 {
-    "name": "daikon/oroshi",
+    "name": "oroshi/oroshi",
     "type": "project",
     "description": "Boilerplate for Daikon CQRS based PHP7 applications.",
-    "homepage": "https://github.com/daikon/oroshi",
+    "homepage": "https://github.com/oroshi/oroshi",
     "license": "MPL-2.0",
     "prefer-stable": true,
     "minimum-stability": "dev",

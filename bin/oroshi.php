@@ -3,7 +3,8 @@
 
 declare(strict_types=1);
 
-ini_set('display_errors', "true");
+//@todo move to debug context
+ini_set('display_errors', 'on');
 
 use Auryn\Injector;
 use Oroshi\Core\Bootstrap\ConsoleBootstrap;

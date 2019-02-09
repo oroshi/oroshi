@@ -1,0 +1,16 @@
+oroshi:
+  http_pipeline:
+    class: Oroshi\Core\Middleware\DefaultPipeline
+    provisioner: Oroshi\Core\Service\Provisioner\HttpPipelineProvisioner
+    settings:
+      pipeline:
+        - \Middlewares\Cors
+        - \Middlewares\ContentEncoding
+        - \Middlewares\ContentType
+        - \Middlewares\ContentLanguage
+        - \Middlewares\ContentEncoding
+        - \Oro\Security\Middleware\JwtDecoder
+        - \Oroshi\Core\Middleware\RoutingHandler
+        - \Oro\Security\Middleware\AuthenticationHandler
+        - \Oroshi\Core\Middleware\ActionHandler
+        - \Middlewares\RequestHandler
