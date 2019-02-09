@@ -14,14 +14,14 @@ use Zend\Diactoros\Response\JsonResponse;
 
 final class UpdateArticleAction
 {
-    private $msgBus;
+    private $config;
 
-    private $cfgProvider;
+    private $messageBus;
 
-    public function __construct(ConfigProviderInterface $cfgProvider, MessageBusInterface $msgBus)
+    public function __construct(ConfigProviderInterface $config, MessageBusInterface $messageBus)
     {
-        $this->msgBus = $msgBus;
-        $this->cfgProvider = $cfgProvider;
+        $this->config = $config;
+        $this->messageBus = $messageBus;
     }
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
@@ -32,18 +32,18 @@ final class UpdateArticleAction
             'title' => 'updated! again!!!!',
             'content' => 'updated again, dude omg!!!!!'
         ]);
-        if ($this->msgBus->publish($updateArticle, 'commands')) {
+        if ($this->messageBus->publish($updateArticle, 'commands')) {
             return new JsonResponse([
                 'status' => 'yay',
                 'msg' => 'successfully update article',
-                'version' => $this->cfgProvider->get('app.version'),
-                'environment' => $this->cfgProvider->get('app.env')
+                'version' => $this->config->get('app.version'),
+                'environment' => $this->config->get('app.env')
             ]);
         }
         return new JsonResponse([
             'status' => 'noes',
-            'version' => $this->cfgProvider->get('app.version'),
-            'environment' => $this->cfgProvider->get('app.env')
+            'version' => $this->config->get('app.version'),
+            'environment' => $this->config->get('app.env')
         ]);
     }
 }
