@@ -163,12 +163,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/daikon-cqrs/config.git",
-                "reference": "b1bfe5391e45b592ebe4d77f352adf70fcf9017d"
+                "reference": "bb9f9d824695e88bf7b8a0f3e7a6eafa88f40c78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/daikon-cqrs/config/zipball/b1bfe5391e45b592ebe4d77f352adf70fcf9017d",
-                "reference": "b1bfe5391e45b592ebe4d77f352adf70fcf9017d",
+                "url": "https://api.github.com/repos/daikon-cqrs/config/zipball/bb9f9d824695e88bf7b8a0f3e7a6eafa88f40c78",
+                "reference": "bb9f9d824695e88bf7b8a0f3e7a6eafa88f40c78",
                 "shasum": ""
             },
             "require": {
@@ -198,7 +198,7 @@
             "keywords": [
                 "config"
             ],
-            "time": "2019-01-29T15:10:28+00:00"
+            "time": "2019-02-09T19:11:44+00:00"
         },
         {
             "name": "daikon/couchdb-adapter",
@@ -1958,12 +1958,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroshi/oroshi-core.git",
-                "reference": "8ef3e61795f6a9287f4a1e7f5ad624adb8743830"
+                "reference": "7d11883159bd22d34def18944d192cd9c21676a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/8ef3e61795f6a9287f4a1e7f5ad624adb8743830",
-                "reference": "8ef3e61795f6a9287f4a1e7f5ad624adb8743830",
+                "url": "https://api.github.com/repos/oroshi/oroshi-core/zipball/7d11883159bd22d34def18944d192cd9c21676a0",
+                "reference": "7d11883159bd22d34def18944d192cd9c21676a0",
                 "shasum": ""
             },
             "require": {
@@ -2011,7 +2011,7 @@
             ],
             "description": "Provisioning and configuration of a Daikon CQRS (app) container.",
             "homepage": "https://github.com/oroshi/oroshi-core",
-            "time": "2019-02-09T16:58:23+00:00"
+            "time": "2019-02-09T17:30:02+00:00"
         },
         {
             "name": "paragonie/random_compat",

@@ -10,5 +10,3 @@ i18n:
   languages:
     - en
     - de
-jwt:
-  secret: 'changeme'
